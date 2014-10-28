@@ -14,8 +14,8 @@
 
 //Variablen für die Zeit
 volatile unsigned int sekunde = 0;
-volatile unsigned int minute = 15;
-volatile unsigned int stunde = 12;
+volatile unsigned int minute = 0;
+volatile unsigned int stunde = 0;
 
 volatile uint8_t statusReg = 0x00;
 volatile uint8_t updateBit = 0;
@@ -25,12 +25,16 @@ volatile uint8_t button3Bit = 3;
 volatile uint8_t button4Bit = 4;
 volatile uint8_t button5Bit = 5;
 volatile uint8_t button6Bit = 6;
-
+volatile uint8_t modeBit = 7;
 
 void toggleLED(void){
 	PORTA ^= 0xff;
 	PORTC ^= 1<<2 | 1<<1 | 1;
 	PORTC ^= 1<<2 | 1<<1 | 1;
+}
+
+void encodeAlarmLed(){
+	
 }
 
 void encodeLed(void){
@@ -113,7 +117,6 @@ void encodeLed(void){
 	PORTA = 0x00;	
 }
 
-
 int main(void)
 {
 	DDRA = 0xff;
@@ -137,9 +140,6 @@ int main(void)
 	//PORTC ^= 0b00000001;
 	//PORTC ^= 0b00000001;
 	
-
-	
-	
 	sei();
 	
 	TCCR1B |= 1<<CS12 | 1<<WGM12;
@@ -150,15 +150,10 @@ int main(void)
     {
         //_delay_ms(1000);
 		//toggleLED();
-		if (bit_is_set(statusReg, updateBit) == 1)
-		{
-			encodeLed();
-			statusReg &= ~(1<<updateBit);
-		}
 		
 		
 		// ========= Setting Hour + =============
-		if ( !( PINB & (1<<PINB3) ) )	// When pulled to LOW by pressibng button
+		if ( !( PINB & (1<<PINB3) ) )	// When pulled to LOW by pressing button
 		{
 			if (bit_is_clear(statusReg, button2Bit)) // When previously not pressed
 			{
@@ -171,17 +166,17 @@ int main(void)
 					stunde = 0;
 				}
 				statusReg |= 1<<button2Bit; // Button was pressed
+				statusReg |= 1<<updateBit;
 			}
 		}
 		else
 		{
-			statusReg &= ~(1<<button2Bit); // Button was pressed
+			statusReg &= ~(1<<button2Bit); // Button is not pressed
 		}
 		// ==================================
 		
-		
 		// ========= Setting Hour - =============
-		if ( !( PINB & (1<<PINB4) ) )	// When pulled to LOW by pressibng button
+		if ( !( PINB & (1<<PINB4) ) )	// When pulled to LOW by pressing button
 		{
 			if (bit_is_clear(statusReg, button1Bit)) // When previously not pressed
 			{
@@ -194,17 +189,17 @@ int main(void)
 					stunde = 23;
 				}
 				statusReg |= 1<<button1Bit; // Button was pressed
+				statusReg |= 1<<updateBit;
 			}
 		}
 		else
 		{
-			statusReg &= ~(1<<button1Bit); // Button was pressed
+			statusReg &= ~(1<<button1Bit); // Button is not pressed
 		}
 		// ==================================
-				
 
 		// ========= Setting Minuten + =============
-		if ( !( PINB & (1<<PINB1) ) )	// When pulled to LOW by pressibng button
+		if ( !( PINB & (1<<PINB1) ) )	// When pulled to LOW by pressing button
 		{
 			if (bit_is_clear(statusReg, button4Bit)) // When previously not pressed
 			{
@@ -220,17 +215,18 @@ int main(void)
 				TCNT1H = 0x00;
 				TCNT1L = 0x00;
 				statusReg |= 1<<button4Bit; // Button was pressed
+				statusReg |= 1<<updateBit;
 			}
 		}
 		else
 		{
-			statusReg &= ~(1<<button4Bit); // Button was pressed
+			statusReg &= ~(1<<button4Bit); // Button is not pressed
 		}
 		// ==================================
 
 
 		// ========= Setting Minuten - =============
-		if ( !( PINB & (1<<PINB2) ) )	// When pulled to LOW by pressibng button
+		if ( !( PINB & (1<<PINB2) ) )	// When pulled to LOW by pressing button
 		{
 			if (bit_is_clear(statusReg, button3Bit)) // When previously not pressed
 			{
@@ -246,18 +242,68 @@ int main(void)
 				TCNT1H = 0x00;
 				TCNT1L = 0x00;
 				statusReg |= 1<<button3Bit; // Button was pressed
+				statusReg |= 1<<updateBit;
 			}
 		}
 		else
 		{
-			statusReg &= ~(1<<button3Bit); // Button was pressed
+			statusReg &= ~(1<<button3Bit); // Button is not pressed
 		}
 		// ==================================
 				
+		// Toggle Alarm
+		if ( !( PIND & (1<<PIND6) ) )	// When pulled to LOW by pressing button
+		{
+			if (bit_is_clear(statusReg, button6Bit)) // When previously not pressed
+			{
+				PORTD ^= (1<<PIND5);
+				statusReg |= 1<<button6Bit; // Button was pressed
+				//statusReg |= 1<<updateBit;
+			}
+		}
+		else
+		{
+			statusReg &= ~(1<<button6Bit); // Button is not pressed
+		}
+		
+		// Mode Toggle
+		if ( !( PINB & (1<<PINB0) ) )	// When pulled to LOW by pressing button
+		{
+			if (bit_is_clear(statusReg, button5Bit)) // When previously not pressed
+			{
+				statusReg ^= 1<<modeBit;
+				statusReg |= 1<<button5Bit; // Button was pressed
+				statusReg |= 1<<updateBit;
+			}
+		}
+		else
+		{
+			statusReg &= ~(1<<button5Bit); // Button is not pressed
+		}
+		
+		/*
+		
+		// Normal mode or Alarm mode?
+		if (bit_is_clear(statusReg, modeBit))
+		{
+			//encodeLed();
+		}
+		else
+		{
+			encodeAlarmLed();
+		}
+		
+		if ((bit_is_set(statusReg, updateBit)))// && (bit_is_clear(statusReg, modeBit)))
+		{
+			encodeLed();
+			statusReg &= ~(1<<updateBit);
+		}
+		*/
+		
 		encodeLed();
-    }
+		
+    } // while end
 }
-
 
 ISR (TIMER1_COMPA_vect)
 {

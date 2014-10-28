@@ -3,29 +3,29 @@ Binary Clock.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         0000079a  00000000  00000000  00000094  2**1
+  0 .text         000008c2  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .data         00000008  00800060  0000079a  0000082e  2**0
+  1 .data         00000008  00800060  000008c2  00000956  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .bss          00000004  00800068  00800068  00000836  2**0
+  2 .bss          00000008  00800068  00800068  0000095e  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  00000836  2**0
+  3 .comment      00000030  00000000  00000000  0000095e  2**0
                   CONTENTS, READONLY
-  4 .debug_aranges 00000038  00000000  00000000  00000866  2**0
+  4 .debug_aranges 00000040  00000000  00000000  0000098e  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_info   000003c7  00000000  00000000  0000089e  2**0
+  5 .debug_info   000003e5  00000000  00000000  000009ce  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_abbrev 00000142  00000000  00000000  00000c65  2**0
+  6 .debug_abbrev 00000158  00000000  00000000  00000db3  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_line   000001da  00000000  00000000  00000da7  2**0
+  7 .debug_line   000001fd  00000000  00000000  00000f0b  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_frame  000000e4  00000000  00000000  00000f84  2**2
+  8 .debug_frame  000000f4  00000000  00000000  00001108  2**2
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    000001ff  00000000  00000000  00001068  2**0
+  9 .debug_str    00000216  00000000  00000000  000011fc  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_loc    00000402  00000000  00000000  00001267  2**0
+ 10 .debug_loc    00000402  00000000  00000000  00001412  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_ranges 00000028  00000000  00000000  00001669  2**0
+ 11 .debug_ranges 00000030  00000000  00000000  00001814  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -38,7 +38,7 @@ Disassembly of section .text:
   10:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
   14:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
   18:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
-  1c:	0c 94 5b 03 	jmp	0x6b6	; 0x6b6 <__vector_7>
+  1c:	0c 94 ef 03 	jmp	0x7de	; 0x7de <__vector_7>
   20:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
   24:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
   28:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
@@ -65,8 +65,8 @@ Disassembly of section .text:
   60:	10 e0       	ldi	r17, 0x00	; 0
   62:	a0 e6       	ldi	r26, 0x60	; 96
   64:	b0 e0       	ldi	r27, 0x00	; 0
-  66:	ea e9       	ldi	r30, 0x9A	; 154
-  68:	f7 e0       	ldi	r31, 0x07	; 7
+  66:	e2 ec       	ldi	r30, 0xC2	; 194
+  68:	f8 e0       	ldi	r31, 0x08	; 8
   6a:	02 c0       	rjmp	.+4      	; 0x70 <__do_copy_data+0x10>
   6c:	05 90       	lpm	r0, Z+
   6e:	0d 92       	st	X+, r0
@@ -84,19 +84,19 @@ Disassembly of section .text:
   7e:	1d 92       	st	X+, r1
 
 00000080 <.do_clear_bss_start>:
-  80:	ac 36       	cpi	r26, 0x6C	; 108
+  80:	a0 37       	cpi	r26, 0x70	; 112
   82:	b2 07       	cpc	r27, r18
   84:	e1 f7       	brne	.-8      	; 0x7e <.do_clear_bss_loop>
   86:	0e 94 00 02 	call	0x400	; 0x400 <main>
-  8a:	0c 94 cb 03 	jmp	0x796	; 0x796 <_exit>
+  8a:	0c 94 5f 04 	jmp	0x8be	; 0x8be <_exit>
 
 0000008e <__bad_interrupt>:
   8e:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
 00000092 <encodeLed>:
-	PORTA ^= 0xff;
-	PORTC ^= 1<<2 | 1<<1 | 1;
-	PORTC ^= 1<<2 | 1<<1 | 1;
+
+void encodeAlarmLed(){
+	
 }
 
 void encodeLed(void){
@@ -128,11 +128,11 @@ void encodeLed(void){
   c4:	cd bf       	out	0x3d, r28	; 61
 	
 	uint8_t sz = sekunde / 10;
-  c6:	20 91 6a 00 	lds	r18, 0x006A
-  ca:	30 91 6b 00 	lds	r19, 0x006B
+  c6:	20 91 6e 00 	lds	r18, 0x006E
+  ca:	30 91 6f 00 	lds	r19, 0x006F
   ce:	ad ec       	ldi	r26, 0xCD	; 205
   d0:	bc ec       	ldi	r27, 0xCC	; 204
-  d2:	0e 94 bc 03 	call	0x778	; 0x778 <__umulhisi3>
+  d2:	0e 94 50 04 	call	0x8a0	; 0x8a0 <__umulhisi3>
   d6:	8c 01       	movw	r16, r24
   d8:	16 95       	lsr	r17
   da:	07 95       	ror	r16
@@ -141,10 +141,10 @@ void encodeLed(void){
   e0:	16 95       	lsr	r17
   e2:	07 95       	ror	r16
 	uint8_t se = sekunde % 10;
-  e4:	e0 91 6a 00 	lds	r30, 0x006A
-  e8:	f0 91 6b 00 	lds	r31, 0x006B
+  e4:	e0 91 6e 00 	lds	r30, 0x006E
+  e8:	f0 91 6f 00 	lds	r31, 0x006F
   ec:	9f 01       	movw	r18, r30
-  ee:	0e 94 bc 03 	call	0x778	; 0x778 <__umulhisi3>
+  ee:	0e 94 50 04 	call	0x8a0	; 0x8a0 <__umulhisi3>
   f2:	96 95       	lsr	r25
   f4:	87 95       	ror	r24
   f6:	96 95       	lsr	r25
@@ -166,9 +166,9 @@ void encodeLed(void){
  116:	f9 0b       	sbc	r31, r25
 	
 	uint8_t mz = minute / 10;
- 118:	20 91 66 00 	lds	r18, 0x0066
- 11c:	30 91 67 00 	lds	r19, 0x0067
- 120:	0e 94 bc 03 	call	0x778	; 0x778 <__umulhisi3>
+ 118:	20 91 6c 00 	lds	r18, 0x006C
+ 11c:	30 91 6d 00 	lds	r19, 0x006D
+ 120:	0e 94 50 04 	call	0x8a0	; 0x8a0 <__umulhisi3>
  124:	96 95       	lsr	r25
  126:	87 95       	ror	r24
  128:	96 95       	lsr	r25
@@ -178,10 +178,10 @@ void encodeLed(void){
  130:	9a 8f       	std	Y+26, r25	; 0x1a
  132:	89 8f       	std	Y+25, r24	; 0x19
 	uint8_t me = minute % 10;
- 134:	40 91 66 00 	lds	r20, 0x0066
- 138:	50 91 67 00 	lds	r21, 0x0067
+ 134:	40 91 6c 00 	lds	r20, 0x006C
+ 138:	50 91 6d 00 	lds	r21, 0x006D
  13c:	9a 01       	movw	r18, r20
- 13e:	0e 94 bc 03 	call	0x778	; 0x778 <__umulhisi3>
+ 13e:	0e 94 50 04 	call	0x8a0	; 0x8a0 <__umulhisi3>
  142:	96 95       	lsr	r25
  144:	87 95       	ror	r24
  146:	96 95       	lsr	r25
@@ -203,9 +203,9 @@ void encodeLed(void){
  166:	59 0b       	sbc	r21, r25
 	
 	uint8_t hz = stunde / 10;
- 168:	20 91 64 00 	lds	r18, 0x0064
- 16c:	30 91 65 00 	lds	r19, 0x0065
- 170:	0e 94 bc 03 	call	0x778	; 0x778 <__umulhisi3>
+ 168:	20 91 6a 00 	lds	r18, 0x006A
+ 16c:	30 91 6b 00 	lds	r19, 0x006B
+ 170:	0e 94 50 04 	call	0x8a0	; 0x8a0 <__umulhisi3>
  174:	4c 01       	movw	r8, r24
  176:	96 94       	lsr	r9
  178:	87 94       	ror	r8
@@ -214,10 +214,10 @@ void encodeLed(void){
  17e:	96 94       	lsr	r9
  180:	87 94       	ror	r8
 	uint8_t he = stunde % 10;
- 182:	60 90 64 00 	lds	r6, 0x0064
- 186:	70 90 65 00 	lds	r7, 0x0065
+ 182:	60 90 6a 00 	lds	r6, 0x006A
+ 186:	70 90 6b 00 	lds	r7, 0x006B
  18a:	93 01       	movw	r18, r6
- 18c:	0e 94 bc 03 	call	0x778	; 0x778 <__umulhisi3>
+ 18c:	0e 94 50 04 	call	0x8a0	; 0x8a0 <__umulhisi3>
  190:	96 95       	lsr	r25
  192:	87 95       	ror	r24
  194:	96 95       	lsr	r25
@@ -583,7 +583,6 @@ void encodeLed(void){
 
 00000400 <main>:
 
-
 int main(void)
 {
 	DDRA = 0xff;
@@ -633,10 +632,10 @@ int main(void)
 	_delay_ms(100);
 	PORTC = 0b00000000;
  432:	15 ba       	out	0x15, r1	; 21
+	//PORTC ^= 1<<2;
+	//PORTC ^= 1<<2;
 	//PORTC ^= 0b00000001;
-	
-
-	
+	//PORTC ^= 0b00000001;
 	
 	sei();
  434:	78 94       	sei
@@ -654,12 +653,12 @@ int main(void)
  444:	9a e7       	ldi	r25, 0x7A	; 122
  446:	9b bd       	out	0x2b, r25	; 43
  448:	8a bd       	out	0x2a, r24	; 42
-	
-    while(1)
-    {
-        //_delay_ms(1000);
-		//toggleLED();
-		if (bit_is_set(statusReg, updateBit) == 1)
+				statusReg |= 1<<updateBit;
+			}
+		}
+		else
+		{
+			statusReg &= ~(1<<button2Bit); // Button is not pressed
  44a:	c1 e0       	ldi	r28, 0x01	; 1
  44c:	d0 e0       	ldi	r29, 0x00	; 0
 				{
@@ -681,83 +680,87 @@ int main(void)
 					minute = 59;
  458:	0b e3       	ldi	r16, 0x3B	; 59
  45a:	10 e0       	ldi	r17, 0x00	; 0
-	
-    while(1)
-    {
+		// Toggle Alarm
+		if ( !( PIND & (1<<PIND6) ) )	// When pulled to LOW by pressing button
+		{
+			if (bit_is_clear(statusReg, button6Bit)) // When previously not pressed
+			{
+				PORTD ^= (1<<PIND5);
+ 45c:	68 94       	set
+ 45e:	dd 24       	eor	r13, r13
+ 460:	d5 f8       	bld	r13, 5
         //_delay_ms(1000);
 		//toggleLED();
-		if (bit_is_set(statusReg, updateBit) == 1)
- 45c:	80 91 69 00 	lds	r24, 0x0069
- 460:	20 91 68 00 	lds	r18, 0x0068
- 464:	ae 01       	movw	r20, r28
- 466:	02 c0       	rjmp	.+4      	; 0x46c <main+0x6c>
- 468:	44 0f       	add	r20, r20
- 46a:	55 1f       	adc	r21, r21
- 46c:	2a 95       	dec	r18
- 46e:	e2 f7       	brpl	.-8      	; 0x468 <main+0x68>
- 470:	90 e0       	ldi	r25, 0x00	; 0
- 472:	84 23       	and	r24, r20
- 474:	95 23       	and	r25, r21
- 476:	01 97       	sbiw	r24, 0x01	; 1
- 478:	89 f4       	brne	.+34     	; 0x49c <main+0x9c>
-		{
-			encodeLed();
- 47a:	0e 94 49 00 	call	0x92	; 0x92 <encodeLed>
-			statusReg &= ~(1<<updateBit);
- 47e:	80 91 68 00 	lds	r24, 0x0068
- 482:	20 91 69 00 	lds	r18, 0x0069
- 486:	ae 01       	movw	r20, r28
- 488:	02 c0       	rjmp	.+4      	; 0x48e <main+0x8e>
- 48a:	44 0f       	add	r20, r20
- 48c:	55 1f       	adc	r21, r21
- 48e:	8a 95       	dec	r24
- 490:	e2 f7       	brpl	.-8      	; 0x48a <main+0x8a>
- 492:	ca 01       	movw	r24, r20
- 494:	80 95       	com	r24
- 496:	82 23       	and	r24, r18
- 498:	80 93 69 00 	sts	0x0069, r24
-		}
 		
 		
 		// ========= Setting Hour + =============
-		if ( !( PINB & (1<<PINB3) ) )	// When pulled to LOW by pressibng button
- 49c:	b3 99       	sbic	0x16, 3	; 22
- 49e:	2f c0       	rjmp	.+94     	; 0x4fe <main+0xfe>
+		if ( !( PINB & (1<<PINB3) ) )	// When pulled to LOW by pressing button
+ 462:	b3 99       	sbic	0x16, 3	; 22
+ 464:	3d c0       	rjmp	.+122    	; 0x4e0 <main+0xe0>
 		{
 			if (bit_is_clear(statusReg, button2Bit)) // When previously not pressed
- 4a0:	80 91 69 00 	lds	r24, 0x0069
- 4a4:	20 91 62 00 	lds	r18, 0x0062
- 4a8:	90 e0       	ldi	r25, 0x00	; 0
- 4aa:	02 c0       	rjmp	.+4      	; 0x4b0 <main+0xb0>
- 4ac:	95 95       	asr	r25
- 4ae:	87 95       	ror	r24
- 4b0:	2a 95       	dec	r18
- 4b2:	e2 f7       	brpl	.-8      	; 0x4ac <main+0xac>
- 4b4:	80 fd       	sbrc	r24, 0
- 4b6:	32 c0       	rjmp	.+100    	; 0x51c <main+0x11c>
+ 466:	80 91 69 00 	lds	r24, 0x0069
+ 46a:	20 91 65 00 	lds	r18, 0x0065
+ 46e:	90 e0       	ldi	r25, 0x00	; 0
+ 470:	02 c0       	rjmp	.+4      	; 0x476 <main+0x76>
+ 472:	95 95       	asr	r25
+ 474:	87 95       	ror	r24
+ 476:	2a 95       	dec	r18
+ 478:	e2 f7       	brpl	.-8      	; 0x472 <main+0x72>
+ 47a:	80 fd       	sbrc	r24, 0
+ 47c:	40 c0       	rjmp	.+128    	; 0x4fe <main+0xfe>
 			{
 				if (stunde < 23)
- 4b8:	80 91 64 00 	lds	r24, 0x0064
- 4bc:	90 91 65 00 	lds	r25, 0x0065
- 4c0:	47 97       	sbiw	r24, 0x17	; 23
- 4c2:	50 f4       	brcc	.+20     	; 0x4d8 <main+0xd8>
+ 47e:	80 91 6a 00 	lds	r24, 0x006A
+ 482:	90 91 6b 00 	lds	r25, 0x006B
+ 486:	47 97       	sbiw	r24, 0x17	; 23
+ 488:	50 f4       	brcc	.+20     	; 0x49e <main+0x9e>
 				{
 					stunde++;
- 4c4:	80 91 64 00 	lds	r24, 0x0064
- 4c8:	90 91 65 00 	lds	r25, 0x0065
- 4cc:	01 96       	adiw	r24, 0x01	; 1
- 4ce:	90 93 65 00 	sts	0x0065, r25
- 4d2:	80 93 64 00 	sts	0x0064, r24
- 4d6:	04 c0       	rjmp	.+8      	; 0x4e0 <main+0xe0>
+ 48a:	80 91 6a 00 	lds	r24, 0x006A
+ 48e:	90 91 6b 00 	lds	r25, 0x006B
+ 492:	01 96       	adiw	r24, 0x01	; 1
+ 494:	90 93 6b 00 	sts	0x006B, r25
+ 498:	80 93 6a 00 	sts	0x006A, r24
+ 49c:	04 c0       	rjmp	.+8      	; 0x4a6 <main+0xa6>
 				}
 				else
 				{
 					stunde = 0;
- 4d8:	10 92 65 00 	sts	0x0065, r1
- 4dc:	10 92 64 00 	sts	0x0064, r1
+ 49e:	10 92 6b 00 	sts	0x006B, r1
+ 4a2:	10 92 6a 00 	sts	0x006A, r1
 				}
 				statusReg |= 1<<button2Bit; // Button was pressed
- 4e0:	80 91 62 00 	lds	r24, 0x0062
+ 4a6:	80 91 65 00 	lds	r24, 0x0065
+ 4aa:	20 91 69 00 	lds	r18, 0x0069
+ 4ae:	ae 01       	movw	r20, r28
+ 4b0:	02 c0       	rjmp	.+4      	; 0x4b6 <main+0xb6>
+ 4b2:	44 0f       	add	r20, r20
+ 4b4:	55 1f       	adc	r21, r21
+ 4b6:	8a 95       	dec	r24
+ 4b8:	e2 f7       	brpl	.-8      	; 0x4b2 <main+0xb2>
+ 4ba:	ca 01       	movw	r24, r20
+ 4bc:	82 2b       	or	r24, r18
+ 4be:	80 93 69 00 	sts	0x0069, r24
+				statusReg |= 1<<updateBit;
+ 4c2:	80 91 68 00 	lds	r24, 0x0068
+ 4c6:	20 91 69 00 	lds	r18, 0x0069
+ 4ca:	ae 01       	movw	r20, r28
+ 4cc:	02 c0       	rjmp	.+4      	; 0x4d2 <main+0xd2>
+ 4ce:	44 0f       	add	r20, r20
+ 4d0:	55 1f       	adc	r21, r21
+ 4d2:	8a 95       	dec	r24
+ 4d4:	e2 f7       	brpl	.-8      	; 0x4ce <main+0xce>
+ 4d6:	ca 01       	movw	r24, r20
+ 4d8:	82 2b       	or	r24, r18
+ 4da:	80 93 69 00 	sts	0x0069, r24
+ 4de:	0f c0       	rjmp	.+30     	; 0x4fe <main+0xfe>
+			}
+		}
+		else
+		{
+			statusReg &= ~(1<<button2Bit); // Button is not pressed
+ 4e0:	80 91 65 00 	lds	r24, 0x0065
  4e4:	20 91 69 00 	lds	r18, 0x0069
  4e8:	ae 01       	movw	r20, r28
  4ea:	02 c0       	rjmp	.+4      	; 0x4f0 <main+0xf0>
@@ -766,238 +769,230 @@ int main(void)
  4f0:	8a 95       	dec	r24
  4f2:	e2 f7       	brpl	.-8      	; 0x4ec <main+0xec>
  4f4:	ca 01       	movw	r24, r20
- 4f6:	82 2b       	or	r24, r18
- 4f8:	80 93 69 00 	sts	0x0069, r24
- 4fc:	0f c0       	rjmp	.+30     	; 0x51c <main+0x11c>
-			}
-		}
-		else
-		{
-			statusReg &= ~(1<<button2Bit); // Button was pressed
- 4fe:	80 91 62 00 	lds	r24, 0x0062
- 502:	20 91 69 00 	lds	r18, 0x0069
- 506:	ae 01       	movw	r20, r28
- 508:	02 c0       	rjmp	.+4      	; 0x50e <main+0x10e>
- 50a:	44 0f       	add	r20, r20
- 50c:	55 1f       	adc	r21, r21
- 50e:	8a 95       	dec	r24
- 510:	e2 f7       	brpl	.-8      	; 0x50a <main+0x10a>
- 512:	ca 01       	movw	r24, r20
- 514:	80 95       	com	r24
- 516:	82 23       	and	r24, r18
- 518:	80 93 69 00 	sts	0x0069, r24
+ 4f6:	80 95       	com	r24
+ 4f8:	82 23       	and	r24, r18
+ 4fa:	80 93 69 00 	sts	0x0069, r24
 		}
 		// ==================================
 		
-		
 		// ========= Setting Hour - =============
-		if ( !( PINB & (1<<PINB4) ) )	// When pulled to LOW by pressibng button
- 51c:	b4 99       	sbic	0x16, 4	; 22
- 51e:	2f c0       	rjmp	.+94     	; 0x57e <main+0x17e>
+		if ( !( PINB & (1<<PINB4) ) )	// When pulled to LOW by pressing button
+ 4fe:	b4 99       	sbic	0x16, 4	; 22
+ 500:	3d c0       	rjmp	.+122    	; 0x57c <main+0x17c>
 		{
 			if (bit_is_clear(statusReg, button1Bit)) // When previously not pressed
- 520:	80 91 69 00 	lds	r24, 0x0069
- 524:	20 91 63 00 	lds	r18, 0x0063
- 528:	90 e0       	ldi	r25, 0x00	; 0
- 52a:	02 c0       	rjmp	.+4      	; 0x530 <main+0x130>
- 52c:	95 95       	asr	r25
- 52e:	87 95       	ror	r24
- 530:	2a 95       	dec	r18
- 532:	e2 f7       	brpl	.-8      	; 0x52c <main+0x12c>
- 534:	80 fd       	sbrc	r24, 0
- 536:	32 c0       	rjmp	.+100    	; 0x59c <main+0x19c>
+ 502:	80 91 69 00 	lds	r24, 0x0069
+ 506:	20 91 66 00 	lds	r18, 0x0066
+ 50a:	90 e0       	ldi	r25, 0x00	; 0
+ 50c:	02 c0       	rjmp	.+4      	; 0x512 <main+0x112>
+ 50e:	95 95       	asr	r25
+ 510:	87 95       	ror	r24
+ 512:	2a 95       	dec	r18
+ 514:	e2 f7       	brpl	.-8      	; 0x50e <main+0x10e>
+ 516:	80 fd       	sbrc	r24, 0
+ 518:	40 c0       	rjmp	.+128    	; 0x59a <main+0x19a>
 			{
 				if (stunde > 1)
- 538:	80 91 64 00 	lds	r24, 0x0064
- 53c:	90 91 65 00 	lds	r25, 0x0065
- 540:	02 97       	sbiw	r24, 0x02	; 2
- 542:	50 f0       	brcs	.+20     	; 0x558 <main+0x158>
+ 51a:	80 91 6a 00 	lds	r24, 0x006A
+ 51e:	90 91 6b 00 	lds	r25, 0x006B
+ 522:	02 97       	sbiw	r24, 0x02	; 2
+ 524:	50 f0       	brcs	.+20     	; 0x53a <main+0x13a>
 				{
 					stunde--;
- 544:	80 91 64 00 	lds	r24, 0x0064
- 548:	90 91 65 00 	lds	r25, 0x0065
- 54c:	01 97       	sbiw	r24, 0x01	; 1
- 54e:	90 93 65 00 	sts	0x0065, r25
- 552:	80 93 64 00 	sts	0x0064, r24
- 556:	04 c0       	rjmp	.+8      	; 0x560 <main+0x160>
+ 526:	80 91 6a 00 	lds	r24, 0x006A
+ 52a:	90 91 6b 00 	lds	r25, 0x006B
+ 52e:	01 97       	sbiw	r24, 0x01	; 1
+ 530:	90 93 6b 00 	sts	0x006B, r25
+ 534:	80 93 6a 00 	sts	0x006A, r24
+ 538:	04 c0       	rjmp	.+8      	; 0x542 <main+0x142>
 				}
 				else
 				{
 					stunde = 23;
- 558:	f0 92 65 00 	sts	0x0065, r15
- 55c:	e0 92 64 00 	sts	0x0064, r14
+ 53a:	f0 92 6b 00 	sts	0x006B, r15
+ 53e:	e0 92 6a 00 	sts	0x006A, r14
 				}
 				statusReg |= 1<<button1Bit; // Button was pressed
- 560:	80 91 63 00 	lds	r24, 0x0063
- 564:	20 91 69 00 	lds	r18, 0x0069
- 568:	ae 01       	movw	r20, r28
- 56a:	02 c0       	rjmp	.+4      	; 0x570 <main+0x170>
- 56c:	44 0f       	add	r20, r20
- 56e:	55 1f       	adc	r21, r21
- 570:	8a 95       	dec	r24
- 572:	e2 f7       	brpl	.-8      	; 0x56c <main+0x16c>
- 574:	ca 01       	movw	r24, r20
- 576:	82 2b       	or	r24, r18
- 578:	80 93 69 00 	sts	0x0069, r24
- 57c:	0f c0       	rjmp	.+30     	; 0x59c <main+0x19c>
+ 542:	80 91 66 00 	lds	r24, 0x0066
+ 546:	20 91 69 00 	lds	r18, 0x0069
+ 54a:	ae 01       	movw	r20, r28
+ 54c:	02 c0       	rjmp	.+4      	; 0x552 <main+0x152>
+ 54e:	44 0f       	add	r20, r20
+ 550:	55 1f       	adc	r21, r21
+ 552:	8a 95       	dec	r24
+ 554:	e2 f7       	brpl	.-8      	; 0x54e <main+0x14e>
+ 556:	ca 01       	movw	r24, r20
+ 558:	82 2b       	or	r24, r18
+ 55a:	80 93 69 00 	sts	0x0069, r24
+				statusReg |= 1<<updateBit;
+ 55e:	80 91 68 00 	lds	r24, 0x0068
+ 562:	20 91 69 00 	lds	r18, 0x0069
+ 566:	ae 01       	movw	r20, r28
+ 568:	02 c0       	rjmp	.+4      	; 0x56e <main+0x16e>
+ 56a:	44 0f       	add	r20, r20
+ 56c:	55 1f       	adc	r21, r21
+ 56e:	8a 95       	dec	r24
+ 570:	e2 f7       	brpl	.-8      	; 0x56a <main+0x16a>
+ 572:	ca 01       	movw	r24, r20
+ 574:	82 2b       	or	r24, r18
+ 576:	80 93 69 00 	sts	0x0069, r24
+ 57a:	0f c0       	rjmp	.+30     	; 0x59a <main+0x19a>
 			}
 		}
 		else
 		{
-			statusReg &= ~(1<<button1Bit); // Button was pressed
- 57e:	80 91 63 00 	lds	r24, 0x0063
- 582:	20 91 69 00 	lds	r18, 0x0069
- 586:	ae 01       	movw	r20, r28
- 588:	02 c0       	rjmp	.+4      	; 0x58e <main+0x18e>
- 58a:	44 0f       	add	r20, r20
- 58c:	55 1f       	adc	r21, r21
- 58e:	8a 95       	dec	r24
- 590:	e2 f7       	brpl	.-8      	; 0x58a <main+0x18a>
- 592:	ca 01       	movw	r24, r20
- 594:	80 95       	com	r24
- 596:	82 23       	and	r24, r18
- 598:	80 93 69 00 	sts	0x0069, r24
+			statusReg &= ~(1<<button1Bit); // Button is not pressed
+ 57c:	80 91 66 00 	lds	r24, 0x0066
+ 580:	20 91 69 00 	lds	r18, 0x0069
+ 584:	ae 01       	movw	r20, r28
+ 586:	02 c0       	rjmp	.+4      	; 0x58c <main+0x18c>
+ 588:	44 0f       	add	r20, r20
+ 58a:	55 1f       	adc	r21, r21
+ 58c:	8a 95       	dec	r24
+ 58e:	e2 f7       	brpl	.-8      	; 0x588 <main+0x188>
+ 590:	ca 01       	movw	r24, r20
+ 592:	80 95       	com	r24
+ 594:	82 23       	and	r24, r18
+ 596:	80 93 69 00 	sts	0x0069, r24
 		}
 		// ==================================
-				
 
 		// ========= Setting Minuten + =============
-		if ( !( PINB & (1<<PINB1) ) )	// When pulled to LOW by pressibng button
- 59c:	b1 99       	sbic	0x16, 1	; 22
- 59e:	35 c0       	rjmp	.+106    	; 0x60a <main+0x20a>
+		if ( !( PINB & (1<<PINB1) ) )	// When pulled to LOW by pressing button
+ 59a:	b1 99       	sbic	0x16, 1	; 22
+ 59c:	43 c0       	rjmp	.+134    	; 0x624 <main+0x224>
 		{
 			if (bit_is_clear(statusReg, button4Bit)) // When previously not pressed
- 5a0:	80 91 69 00 	lds	r24, 0x0069
- 5a4:	20 91 60 00 	lds	r18, 0x0060
- 5a8:	90 e0       	ldi	r25, 0x00	; 0
- 5aa:	02 c0       	rjmp	.+4      	; 0x5b0 <main+0x1b0>
- 5ac:	95 95       	asr	r25
- 5ae:	87 95       	ror	r24
- 5b0:	2a 95       	dec	r18
- 5b2:	e2 f7       	brpl	.-8      	; 0x5ac <main+0x1ac>
- 5b4:	80 fd       	sbrc	r24, 0
- 5b6:	38 c0       	rjmp	.+112    	; 0x628 <main+0x228>
+ 59e:	80 91 69 00 	lds	r24, 0x0069
+ 5a2:	20 91 63 00 	lds	r18, 0x0063
+ 5a6:	90 e0       	ldi	r25, 0x00	; 0
+ 5a8:	02 c0       	rjmp	.+4      	; 0x5ae <main+0x1ae>
+ 5aa:	95 95       	asr	r25
+ 5ac:	87 95       	ror	r24
+ 5ae:	2a 95       	dec	r18
+ 5b0:	e2 f7       	brpl	.-8      	; 0x5aa <main+0x1aa>
+ 5b2:	80 fd       	sbrc	r24, 0
+ 5b4:	46 c0       	rjmp	.+140    	; 0x642 <main+0x242>
 			{
 				if (minute < 59)
- 5b8:	80 91 66 00 	lds	r24, 0x0066
- 5bc:	90 91 67 00 	lds	r25, 0x0067
- 5c0:	cb 97       	sbiw	r24, 0x3b	; 59
- 5c2:	50 f4       	brcc	.+20     	; 0x5d8 <main+0x1d8>
+ 5b6:	80 91 6c 00 	lds	r24, 0x006C
+ 5ba:	90 91 6d 00 	lds	r25, 0x006D
+ 5be:	cb 97       	sbiw	r24, 0x3b	; 59
+ 5c0:	50 f4       	brcc	.+20     	; 0x5d6 <main+0x1d6>
 				{
 					minute++;
- 5c4:	80 91 66 00 	lds	r24, 0x0066
- 5c8:	90 91 67 00 	lds	r25, 0x0067
- 5cc:	01 96       	adiw	r24, 0x01	; 1
- 5ce:	90 93 67 00 	sts	0x0067, r25
- 5d2:	80 93 66 00 	sts	0x0066, r24
- 5d6:	04 c0       	rjmp	.+8      	; 0x5e0 <main+0x1e0>
+ 5c2:	80 91 6c 00 	lds	r24, 0x006C
+ 5c6:	90 91 6d 00 	lds	r25, 0x006D
+ 5ca:	01 96       	adiw	r24, 0x01	; 1
+ 5cc:	90 93 6d 00 	sts	0x006D, r25
+ 5d0:	80 93 6c 00 	sts	0x006C, r24
+ 5d4:	04 c0       	rjmp	.+8      	; 0x5de <main+0x1de>
 				}
 				else
 				{
 					minute = 0;
- 5d8:	10 92 67 00 	sts	0x0067, r1
- 5dc:	10 92 66 00 	sts	0x0066, r1
+ 5d6:	10 92 6d 00 	sts	0x006D, r1
+ 5da:	10 92 6c 00 	sts	0x006C, r1
 				}
 				sekunde = 0;
- 5e0:	10 92 6b 00 	sts	0x006B, r1
- 5e4:	10 92 6a 00 	sts	0x006A, r1
+ 5de:	10 92 6f 00 	sts	0x006F, r1
+ 5e2:	10 92 6e 00 	sts	0x006E, r1
 				TCNT1H = 0x00;
- 5e8:	1d bc       	out	0x2d, r1	; 45
+ 5e6:	1d bc       	out	0x2d, r1	; 45
 				TCNT1L = 0x00;
- 5ea:	1c bc       	out	0x2c, r1	; 44
+ 5e8:	1c bc       	out	0x2c, r1	; 44
 				statusReg |= 1<<button4Bit; // Button was pressed
- 5ec:	80 91 60 00 	lds	r24, 0x0060
- 5f0:	20 91 69 00 	lds	r18, 0x0069
- 5f4:	ae 01       	movw	r20, r28
- 5f6:	02 c0       	rjmp	.+4      	; 0x5fc <main+0x1fc>
- 5f8:	44 0f       	add	r20, r20
- 5fa:	55 1f       	adc	r21, r21
- 5fc:	8a 95       	dec	r24
- 5fe:	e2 f7       	brpl	.-8      	; 0x5f8 <main+0x1f8>
- 600:	ca 01       	movw	r24, r20
- 602:	82 2b       	or	r24, r18
- 604:	80 93 69 00 	sts	0x0069, r24
- 608:	0f c0       	rjmp	.+30     	; 0x628 <main+0x228>
+ 5ea:	80 91 63 00 	lds	r24, 0x0063
+ 5ee:	20 91 69 00 	lds	r18, 0x0069
+ 5f2:	ae 01       	movw	r20, r28
+ 5f4:	02 c0       	rjmp	.+4      	; 0x5fa <main+0x1fa>
+ 5f6:	44 0f       	add	r20, r20
+ 5f8:	55 1f       	adc	r21, r21
+ 5fa:	8a 95       	dec	r24
+ 5fc:	e2 f7       	brpl	.-8      	; 0x5f6 <main+0x1f6>
+ 5fe:	ca 01       	movw	r24, r20
+ 600:	82 2b       	or	r24, r18
+ 602:	80 93 69 00 	sts	0x0069, r24
+				statusReg |= 1<<updateBit;
+ 606:	80 91 68 00 	lds	r24, 0x0068
+ 60a:	20 91 69 00 	lds	r18, 0x0069
+ 60e:	ae 01       	movw	r20, r28
+ 610:	02 c0       	rjmp	.+4      	; 0x616 <main+0x216>
+ 612:	44 0f       	add	r20, r20
+ 614:	55 1f       	adc	r21, r21
+ 616:	8a 95       	dec	r24
+ 618:	e2 f7       	brpl	.-8      	; 0x612 <main+0x212>
+ 61a:	ca 01       	movw	r24, r20
+ 61c:	82 2b       	or	r24, r18
+ 61e:	80 93 69 00 	sts	0x0069, r24
+ 622:	0f c0       	rjmp	.+30     	; 0x642 <main+0x242>
 			}
 		}
 		else
 		{
-			statusReg &= ~(1<<button4Bit); // Button was pressed
- 60a:	80 91 60 00 	lds	r24, 0x0060
- 60e:	20 91 69 00 	lds	r18, 0x0069
- 612:	ae 01       	movw	r20, r28
- 614:	02 c0       	rjmp	.+4      	; 0x61a <main+0x21a>
- 616:	44 0f       	add	r20, r20
- 618:	55 1f       	adc	r21, r21
- 61a:	8a 95       	dec	r24
- 61c:	e2 f7       	brpl	.-8      	; 0x616 <main+0x216>
- 61e:	ca 01       	movw	r24, r20
- 620:	80 95       	com	r24
- 622:	82 23       	and	r24, r18
- 624:	80 93 69 00 	sts	0x0069, r24
+			statusReg &= ~(1<<button4Bit); // Button is not pressed
+ 624:	80 91 63 00 	lds	r24, 0x0063
+ 628:	20 91 69 00 	lds	r18, 0x0069
+ 62c:	ae 01       	movw	r20, r28
+ 62e:	02 c0       	rjmp	.+4      	; 0x634 <main+0x234>
+ 630:	44 0f       	add	r20, r20
+ 632:	55 1f       	adc	r21, r21
+ 634:	8a 95       	dec	r24
+ 636:	e2 f7       	brpl	.-8      	; 0x630 <main+0x230>
+ 638:	ca 01       	movw	r24, r20
+ 63a:	80 95       	com	r24
+ 63c:	82 23       	and	r24, r18
+ 63e:	80 93 69 00 	sts	0x0069, r24
 		}
 		// ==================================
 
 
 		// ========= Setting Minuten - =============
-		if ( !( PINB & (1<<PINB2) ) )	// When pulled to LOW by pressibng button
- 628:	b2 99       	sbic	0x16, 2	; 22
- 62a:	33 c0       	rjmp	.+102    	; 0x692 <main+0x292>
+		if ( !( PINB & (1<<PINB2) ) )	// When pulled to LOW by pressing button
+ 642:	b2 99       	sbic	0x16, 2	; 22
+ 644:	43 c0       	rjmp	.+134    	; 0x6cc <main+0x2cc>
 		{
 			if (bit_is_clear(statusReg, button3Bit)) // When previously not pressed
- 62c:	80 91 69 00 	lds	r24, 0x0069
- 630:	20 91 61 00 	lds	r18, 0x0061
- 634:	90 e0       	ldi	r25, 0x00	; 0
- 636:	02 c0       	rjmp	.+4      	; 0x63c <main+0x23c>
- 638:	95 95       	asr	r25
- 63a:	87 95       	ror	r24
- 63c:	2a 95       	dec	r18
- 63e:	e2 f7       	brpl	.-8      	; 0x638 <main+0x238>
- 640:	80 fd       	sbrc	r24, 0
- 642:	36 c0       	rjmp	.+108    	; 0x6b0 <main+0x2b0>
+ 646:	80 91 69 00 	lds	r24, 0x0069
+ 64a:	20 91 64 00 	lds	r18, 0x0064
+ 64e:	90 e0       	ldi	r25, 0x00	; 0
+ 650:	02 c0       	rjmp	.+4      	; 0x656 <main+0x256>
+ 652:	95 95       	asr	r25
+ 654:	87 95       	ror	r24
+ 656:	2a 95       	dec	r18
+ 658:	e2 f7       	brpl	.-8      	; 0x652 <main+0x252>
+ 65a:	80 fd       	sbrc	r24, 0
+ 65c:	46 c0       	rjmp	.+140    	; 0x6ea <main+0x2ea>
 			{
 				if (minute > 1)
- 644:	80 91 66 00 	lds	r24, 0x0066
- 648:	90 91 67 00 	lds	r25, 0x0067
- 64c:	02 97       	sbiw	r24, 0x02	; 2
- 64e:	50 f0       	brcs	.+20     	; 0x664 <main+0x264>
+ 65e:	80 91 6c 00 	lds	r24, 0x006C
+ 662:	90 91 6d 00 	lds	r25, 0x006D
+ 666:	02 97       	sbiw	r24, 0x02	; 2
+ 668:	50 f0       	brcs	.+20     	; 0x67e <main+0x27e>
 				{
 					minute--;
- 650:	80 91 66 00 	lds	r24, 0x0066
- 654:	90 91 67 00 	lds	r25, 0x0067
- 658:	01 97       	sbiw	r24, 0x01	; 1
- 65a:	90 93 67 00 	sts	0x0067, r25
- 65e:	80 93 66 00 	sts	0x0066, r24
- 662:	04 c0       	rjmp	.+8      	; 0x66c <main+0x26c>
+ 66a:	80 91 6c 00 	lds	r24, 0x006C
+ 66e:	90 91 6d 00 	lds	r25, 0x006D
+ 672:	01 97       	sbiw	r24, 0x01	; 1
+ 674:	90 93 6d 00 	sts	0x006D, r25
+ 678:	80 93 6c 00 	sts	0x006C, r24
+ 67c:	04 c0       	rjmp	.+8      	; 0x686 <main+0x286>
 				}
 				else
 				{
 					minute = 59;
- 664:	10 93 67 00 	sts	0x0067, r17
- 668:	00 93 66 00 	sts	0x0066, r16
+ 67e:	10 93 6d 00 	sts	0x006D, r17
+ 682:	00 93 6c 00 	sts	0x006C, r16
 				}
 				sekunde = 0;
- 66c:	10 92 6b 00 	sts	0x006B, r1
- 670:	10 92 6a 00 	sts	0x006A, r1
+ 686:	10 92 6f 00 	sts	0x006F, r1
+ 68a:	10 92 6e 00 	sts	0x006E, r1
+				TCNT1H = 0x00;
+ 68e:	1d bc       	out	0x2d, r1	; 45
+				TCNT1L = 0x00;
+ 690:	1c bc       	out	0x2c, r1	; 44
 				statusReg |= 1<<button3Bit; // Button was pressed
- 674:	80 91 61 00 	lds	r24, 0x0061
- 678:	20 91 69 00 	lds	r18, 0x0069
- 67c:	ae 01       	movw	r20, r28
- 67e:	02 c0       	rjmp	.+4      	; 0x684 <main+0x284>
- 680:	44 0f       	add	r20, r20
- 682:	55 1f       	adc	r21, r21
- 684:	8a 95       	dec	r24
- 686:	e2 f7       	brpl	.-8      	; 0x680 <main+0x280>
- 688:	ca 01       	movw	r24, r20
- 68a:	82 2b       	or	r24, r18
- 68c:	80 93 69 00 	sts	0x0069, r24
- 690:	0f c0       	rjmp	.+30     	; 0x6b0 <main+0x2b0>
-			}
-		}
-		else
-		{
-			statusReg &= ~(1<<button3Bit); // Button was pressed
- 692:	80 91 61 00 	lds	r24, 0x0061
+ 692:	80 91 64 00 	lds	r24, 0x0064
  696:	20 91 69 00 	lds	r18, 0x0069
  69a:	ae 01       	movw	r20, r28
  69c:	02 c0       	rjmp	.+4      	; 0x6a2 <main+0x2a2>
@@ -1006,129 +1001,288 @@ int main(void)
  6a2:	8a 95       	dec	r24
  6a4:	e2 f7       	brpl	.-8      	; 0x69e <main+0x29e>
  6a6:	ca 01       	movw	r24, r20
- 6a8:	80 95       	com	r24
- 6aa:	82 23       	and	r24, r18
- 6ac:	80 93 69 00 	sts	0x0069, r24
+ 6a8:	82 2b       	or	r24, r18
+ 6aa:	80 93 69 00 	sts	0x0069, r24
+				statusReg |= 1<<updateBit;
+ 6ae:	80 91 68 00 	lds	r24, 0x0068
+ 6b2:	20 91 69 00 	lds	r18, 0x0069
+ 6b6:	ae 01       	movw	r20, r28
+ 6b8:	02 c0       	rjmp	.+4      	; 0x6be <main+0x2be>
+ 6ba:	44 0f       	add	r20, r20
+ 6bc:	55 1f       	adc	r21, r21
+ 6be:	8a 95       	dec	r24
+ 6c0:	e2 f7       	brpl	.-8      	; 0x6ba <main+0x2ba>
+ 6c2:	ca 01       	movw	r24, r20
+ 6c4:	82 2b       	or	r24, r18
+ 6c6:	80 93 69 00 	sts	0x0069, r24
+ 6ca:	0f c0       	rjmp	.+30     	; 0x6ea <main+0x2ea>
+			}
+		}
+		else
+		{
+			statusReg &= ~(1<<button3Bit); // Button is not pressed
+ 6cc:	80 91 64 00 	lds	r24, 0x0064
+ 6d0:	20 91 69 00 	lds	r18, 0x0069
+ 6d4:	ae 01       	movw	r20, r28
+ 6d6:	02 c0       	rjmp	.+4      	; 0x6dc <main+0x2dc>
+ 6d8:	44 0f       	add	r20, r20
+ 6da:	55 1f       	adc	r21, r21
+ 6dc:	8a 95       	dec	r24
+ 6de:	e2 f7       	brpl	.-8      	; 0x6d8 <main+0x2d8>
+ 6e0:	ca 01       	movw	r24, r20
+ 6e2:	80 95       	com	r24
+ 6e4:	82 23       	and	r24, r18
+ 6e6:	80 93 69 00 	sts	0x0069, r24
 		}
 		// ==================================
 				
+		// Toggle Alarm
+		if ( !( PIND & (1<<PIND6) ) )	// When pulled to LOW by pressing button
+ 6ea:	86 99       	sbic	0x10, 6	; 16
+ 6ec:	1e c0       	rjmp	.+60     	; 0x72a <main+0x32a>
+		{
+			if (bit_is_clear(statusReg, button6Bit)) // When previously not pressed
+ 6ee:	80 91 69 00 	lds	r24, 0x0069
+ 6f2:	20 91 61 00 	lds	r18, 0x0061
+ 6f6:	90 e0       	ldi	r25, 0x00	; 0
+ 6f8:	02 c0       	rjmp	.+4      	; 0x6fe <main+0x2fe>
+ 6fa:	95 95       	asr	r25
+ 6fc:	87 95       	ror	r24
+ 6fe:	2a 95       	dec	r18
+ 700:	e2 f7       	brpl	.-8      	; 0x6fa <main+0x2fa>
+ 702:	80 fd       	sbrc	r24, 0
+ 704:	21 c0       	rjmp	.+66     	; 0x748 <main+0x348>
+			{
+				PORTD ^= (1<<PIND5);
+ 706:	82 b3       	in	r24, 0x12	; 18
+ 708:	8d 25       	eor	r24, r13
+ 70a:	82 bb       	out	0x12, r24	; 18
+				statusReg |= 1<<button6Bit; // Button was pressed
+ 70c:	80 91 61 00 	lds	r24, 0x0061
+ 710:	20 91 69 00 	lds	r18, 0x0069
+ 714:	ae 01       	movw	r20, r28
+ 716:	02 c0       	rjmp	.+4      	; 0x71c <main+0x31c>
+ 718:	44 0f       	add	r20, r20
+ 71a:	55 1f       	adc	r21, r21
+ 71c:	8a 95       	dec	r24
+ 71e:	e2 f7       	brpl	.-8      	; 0x718 <main+0x318>
+ 720:	ca 01       	movw	r24, r20
+ 722:	82 2b       	or	r24, r18
+ 724:	80 93 69 00 	sts	0x0069, r24
+ 728:	0f c0       	rjmp	.+30     	; 0x748 <main+0x348>
+				//statusReg |= 1<<updateBit;
+			}
+		}
+		else
+		{
+			statusReg &= ~(1<<button6Bit); // Button is not pressed
+ 72a:	80 91 61 00 	lds	r24, 0x0061
+ 72e:	20 91 69 00 	lds	r18, 0x0069
+ 732:	ae 01       	movw	r20, r28
+ 734:	02 c0       	rjmp	.+4      	; 0x73a <main+0x33a>
+ 736:	44 0f       	add	r20, r20
+ 738:	55 1f       	adc	r21, r21
+ 73a:	8a 95       	dec	r24
+ 73c:	e2 f7       	brpl	.-8      	; 0x736 <main+0x336>
+ 73e:	ca 01       	movw	r24, r20
+ 740:	80 95       	com	r24
+ 742:	82 23       	and	r24, r18
+ 744:	80 93 69 00 	sts	0x0069, r24
+		}
+		
+		// Mode Toggle
+		if ( !( PINB & (1<<PINB0) ) )	// When pulled to LOW by pressing button
+ 748:	b0 99       	sbic	0x16, 0	; 22
+ 74a:	37 c0       	rjmp	.+110    	; 0x7ba <main+0x3ba>
+		{
+			if (bit_is_clear(statusReg, button5Bit)) // When previously not pressed
+ 74c:	80 91 69 00 	lds	r24, 0x0069
+ 750:	20 91 62 00 	lds	r18, 0x0062
+ 754:	90 e0       	ldi	r25, 0x00	; 0
+ 756:	02 c0       	rjmp	.+4      	; 0x75c <main+0x35c>
+ 758:	95 95       	asr	r25
+ 75a:	87 95       	ror	r24
+ 75c:	2a 95       	dec	r18
+ 75e:	e2 f7       	brpl	.-8      	; 0x758 <main+0x358>
+ 760:	80 fd       	sbrc	r24, 0
+ 762:	3a c0       	rjmp	.+116    	; 0x7d8 <main+0x3d8>
+			{
+				statusReg ^= 1<<modeBit;
+ 764:	80 91 60 00 	lds	r24, 0x0060
+ 768:	20 91 69 00 	lds	r18, 0x0069
+ 76c:	ae 01       	movw	r20, r28
+ 76e:	02 c0       	rjmp	.+4      	; 0x774 <main+0x374>
+ 770:	44 0f       	add	r20, r20
+ 772:	55 1f       	adc	r21, r21
+ 774:	8a 95       	dec	r24
+ 776:	e2 f7       	brpl	.-8      	; 0x770 <main+0x370>
+ 778:	ca 01       	movw	r24, r20
+ 77a:	82 27       	eor	r24, r18
+ 77c:	80 93 69 00 	sts	0x0069, r24
+				statusReg |= 1<<button5Bit; // Button was pressed
+ 780:	80 91 62 00 	lds	r24, 0x0062
+ 784:	20 91 69 00 	lds	r18, 0x0069
+ 788:	ae 01       	movw	r20, r28
+ 78a:	02 c0       	rjmp	.+4      	; 0x790 <main+0x390>
+ 78c:	44 0f       	add	r20, r20
+ 78e:	55 1f       	adc	r21, r21
+ 790:	8a 95       	dec	r24
+ 792:	e2 f7       	brpl	.-8      	; 0x78c <main+0x38c>
+ 794:	ca 01       	movw	r24, r20
+ 796:	82 2b       	or	r24, r18
+ 798:	80 93 69 00 	sts	0x0069, r24
+				statusReg |= 1<<updateBit;
+ 79c:	80 91 68 00 	lds	r24, 0x0068
+ 7a0:	20 91 69 00 	lds	r18, 0x0069
+ 7a4:	ae 01       	movw	r20, r28
+ 7a6:	02 c0       	rjmp	.+4      	; 0x7ac <main+0x3ac>
+ 7a8:	44 0f       	add	r20, r20
+ 7aa:	55 1f       	adc	r21, r21
+ 7ac:	8a 95       	dec	r24
+ 7ae:	e2 f7       	brpl	.-8      	; 0x7a8 <main+0x3a8>
+ 7b0:	ca 01       	movw	r24, r20
+ 7b2:	82 2b       	or	r24, r18
+ 7b4:	80 93 69 00 	sts	0x0069, r24
+ 7b8:	0f c0       	rjmp	.+30     	; 0x7d8 <main+0x3d8>
+			}
+		}
+		else
+		{
+			statusReg &= ~(1<<button5Bit); // Button is not pressed
+ 7ba:	80 91 62 00 	lds	r24, 0x0062
+ 7be:	20 91 69 00 	lds	r18, 0x0069
+ 7c2:	ae 01       	movw	r20, r28
+ 7c4:	02 c0       	rjmp	.+4      	; 0x7ca <main+0x3ca>
+ 7c6:	44 0f       	add	r20, r20
+ 7c8:	55 1f       	adc	r21, r21
+ 7ca:	8a 95       	dec	r24
+ 7cc:	e2 f7       	brpl	.-8      	; 0x7c6 <main+0x3c6>
+ 7ce:	ca 01       	movw	r24, r20
+ 7d0:	80 95       	com	r24
+ 7d2:	82 23       	and	r24, r18
+ 7d4:	80 93 69 00 	sts	0x0069, r24
+			encodeLed();
+			statusReg &= ~(1<<updateBit);
+		}
+		*/
+		
 		encodeLed();
- 6b0:	0e 94 49 00 	call	0x92	; 0x92 <encodeLed>
-    }
- 6b4:	d3 ce       	rjmp	.-602    	; 0x45c <main+0x5c>
+ 7d8:	0e 94 49 00 	call	0x92	; 0x92 <encodeLed>
+		
+    } // while end
+ 7dc:	42 ce       	rjmp	.-892    	; 0x462 <main+0x62>
 
-000006b6 <__vector_7>:
+000007de <__vector_7>:
 }
-
 
 ISR (TIMER1_COMPA_vect)
 {
- 6b6:	1f 92       	push	r1
- 6b8:	0f 92       	push	r0
- 6ba:	0f b6       	in	r0, 0x3f	; 63
- 6bc:	0f 92       	push	r0
- 6be:	11 24       	eor	r1, r1
- 6c0:	2f 93       	push	r18
- 6c2:	3f 93       	push	r19
- 6c4:	4f 93       	push	r20
- 6c6:	6f 93       	push	r22
- 6c8:	7f 93       	push	r23
- 6ca:	8f 93       	push	r24
- 6cc:	9f 93       	push	r25
+ 7de:	1f 92       	push	r1
+ 7e0:	0f 92       	push	r0
+ 7e2:	0f b6       	in	r0, 0x3f	; 63
+ 7e4:	0f 92       	push	r0
+ 7e6:	11 24       	eor	r1, r1
+ 7e8:	2f 93       	push	r18
+ 7ea:	3f 93       	push	r19
+ 7ec:	4f 93       	push	r20
+ 7ee:	6f 93       	push	r22
+ 7f0:	7f 93       	push	r23
+ 7f2:	8f 93       	push	r24
+ 7f4:	9f 93       	push	r25
 	sekunde++;
- 6ce:	80 91 6a 00 	lds	r24, 0x006A
- 6d2:	90 91 6b 00 	lds	r25, 0x006B
- 6d6:	01 96       	adiw	r24, 0x01	; 1
- 6d8:	90 93 6b 00 	sts	0x006B, r25
- 6dc:	80 93 6a 00 	sts	0x006A, r24
+ 7f6:	80 91 6e 00 	lds	r24, 0x006E
+ 7fa:	90 91 6f 00 	lds	r25, 0x006F
+ 7fe:	01 96       	adiw	r24, 0x01	; 1
+ 800:	90 93 6f 00 	sts	0x006F, r25
+ 804:	80 93 6e 00 	sts	0x006E, r24
 	if(sekunde == 60)
- 6e0:	80 91 6a 00 	lds	r24, 0x006A
- 6e4:	90 91 6b 00 	lds	r25, 0x006B
- 6e8:	cc 97       	sbiw	r24, 0x3c	; 60
- 6ea:	69 f4       	brne	.+26     	; 0x706 <__vector_7+0x50>
+ 808:	80 91 6e 00 	lds	r24, 0x006E
+ 80c:	90 91 6f 00 	lds	r25, 0x006F
+ 810:	cc 97       	sbiw	r24, 0x3c	; 60
+ 812:	69 f4       	brne	.+26     	; 0x82e <__vector_7+0x50>
 	{
 		minute++;
- 6ec:	80 91 66 00 	lds	r24, 0x0066
- 6f0:	90 91 67 00 	lds	r25, 0x0067
- 6f4:	01 96       	adiw	r24, 0x01	; 1
- 6f6:	90 93 67 00 	sts	0x0067, r25
- 6fa:	80 93 66 00 	sts	0x0066, r24
+ 814:	80 91 6c 00 	lds	r24, 0x006C
+ 818:	90 91 6d 00 	lds	r25, 0x006D
+ 81c:	01 96       	adiw	r24, 0x01	; 1
+ 81e:	90 93 6d 00 	sts	0x006D, r25
+ 822:	80 93 6c 00 	sts	0x006C, r24
 		sekunde = 0;
- 6fe:	10 92 6b 00 	sts	0x006B, r1
- 702:	10 92 6a 00 	sts	0x006A, r1
+ 826:	10 92 6f 00 	sts	0x006F, r1
+ 82a:	10 92 6e 00 	sts	0x006E, r1
 	}
 	if(minute == 60)
- 706:	80 91 66 00 	lds	r24, 0x0066
- 70a:	90 91 67 00 	lds	r25, 0x0067
- 70e:	cc 97       	sbiw	r24, 0x3c	; 60
- 710:	69 f4       	brne	.+26     	; 0x72c <__vector_7+0x76>
+ 82e:	80 91 6c 00 	lds	r24, 0x006C
+ 832:	90 91 6d 00 	lds	r25, 0x006D
+ 836:	cc 97       	sbiw	r24, 0x3c	; 60
+ 838:	69 f4       	brne	.+26     	; 0x854 <__vector_7+0x76>
 	{
 		stunde++;
- 712:	80 91 64 00 	lds	r24, 0x0064
- 716:	90 91 65 00 	lds	r25, 0x0065
- 71a:	01 96       	adiw	r24, 0x01	; 1
- 71c:	90 93 65 00 	sts	0x0065, r25
- 720:	80 93 64 00 	sts	0x0064, r24
+ 83a:	80 91 6a 00 	lds	r24, 0x006A
+ 83e:	90 91 6b 00 	lds	r25, 0x006B
+ 842:	01 96       	adiw	r24, 0x01	; 1
+ 844:	90 93 6b 00 	sts	0x006B, r25
+ 848:	80 93 6a 00 	sts	0x006A, r24
 		minute = 0;
- 724:	10 92 67 00 	sts	0x0067, r1
- 728:	10 92 66 00 	sts	0x0066, r1
+ 84c:	10 92 6d 00 	sts	0x006D, r1
+ 850:	10 92 6c 00 	sts	0x006C, r1
 	}
 	if(stunde == 24)
- 72c:	80 91 64 00 	lds	r24, 0x0064
- 730:	90 91 65 00 	lds	r25, 0x0065
- 734:	48 97       	sbiw	r24, 0x18	; 24
- 736:	21 f4       	brne	.+8      	; 0x740 <__vector_7+0x8a>
+ 854:	80 91 6a 00 	lds	r24, 0x006A
+ 858:	90 91 6b 00 	lds	r25, 0x006B
+ 85c:	48 97       	sbiw	r24, 0x18	; 24
+ 85e:	21 f4       	brne	.+8      	; 0x868 <__stack+0x9>
 	{
 		stunde = 0;
- 738:	10 92 65 00 	sts	0x0065, r1
- 73c:	10 92 64 00 	sts	0x0064, r1
+ 860:	10 92 6b 00 	sts	0x006B, r1
+ 864:	10 92 6a 00 	sts	0x006A, r1
 	}
 	statusReg |= 1<<updateBit;
- 740:	80 91 68 00 	lds	r24, 0x0068
- 744:	40 91 69 00 	lds	r20, 0x0069
- 748:	21 e0       	ldi	r18, 0x01	; 1
- 74a:	30 e0       	ldi	r19, 0x00	; 0
- 74c:	b9 01       	movw	r22, r18
- 74e:	02 c0       	rjmp	.+4      	; 0x754 <__vector_7+0x9e>
- 750:	66 0f       	add	r22, r22
- 752:	77 1f       	adc	r23, r23
- 754:	8a 95       	dec	r24
- 756:	e2 f7       	brpl	.-8      	; 0x750 <__vector_7+0x9a>
- 758:	cb 01       	movw	r24, r22
- 75a:	84 2b       	or	r24, r20
- 75c:	80 93 69 00 	sts	0x0069, r24
- 760:	9f 91       	pop	r25
- 762:	8f 91       	pop	r24
- 764:	7f 91       	pop	r23
- 766:	6f 91       	pop	r22
- 768:	4f 91       	pop	r20
- 76a:	3f 91       	pop	r19
- 76c:	2f 91       	pop	r18
- 76e:	0f 90       	pop	r0
- 770:	0f be       	out	0x3f, r0	; 63
- 772:	0f 90       	pop	r0
- 774:	1f 90       	pop	r1
- 776:	18 95       	reti
+ 868:	80 91 68 00 	lds	r24, 0x0068
+ 86c:	40 91 69 00 	lds	r20, 0x0069
+ 870:	21 e0       	ldi	r18, 0x01	; 1
+ 872:	30 e0       	ldi	r19, 0x00	; 0
+ 874:	b9 01       	movw	r22, r18
+ 876:	02 c0       	rjmp	.+4      	; 0x87c <__stack+0x1d>
+ 878:	66 0f       	add	r22, r22
+ 87a:	77 1f       	adc	r23, r23
+ 87c:	8a 95       	dec	r24
+ 87e:	e2 f7       	brpl	.-8      	; 0x878 <__stack+0x19>
+ 880:	cb 01       	movw	r24, r22
+ 882:	84 2b       	or	r24, r20
+ 884:	80 93 69 00 	sts	0x0069, r24
+ 888:	9f 91       	pop	r25
+ 88a:	8f 91       	pop	r24
+ 88c:	7f 91       	pop	r23
+ 88e:	6f 91       	pop	r22
+ 890:	4f 91       	pop	r20
+ 892:	3f 91       	pop	r19
+ 894:	2f 91       	pop	r18
+ 896:	0f 90       	pop	r0
+ 898:	0f be       	out	0x3f, r0	; 63
+ 89a:	0f 90       	pop	r0
+ 89c:	1f 90       	pop	r1
+ 89e:	18 95       	reti
 
-00000778 <__umulhisi3>:
- 778:	a2 9f       	mul	r26, r18
- 77a:	b0 01       	movw	r22, r0
- 77c:	b3 9f       	mul	r27, r19
- 77e:	c0 01       	movw	r24, r0
- 780:	a3 9f       	mul	r26, r19
- 782:	70 0d       	add	r23, r0
- 784:	81 1d       	adc	r24, r1
- 786:	11 24       	eor	r1, r1
- 788:	91 1d       	adc	r25, r1
- 78a:	b2 9f       	mul	r27, r18
- 78c:	70 0d       	add	r23, r0
- 78e:	81 1d       	adc	r24, r1
- 790:	11 24       	eor	r1, r1
- 792:	91 1d       	adc	r25, r1
- 794:	08 95       	ret
+000008a0 <__umulhisi3>:
+ 8a0:	a2 9f       	mul	r26, r18
+ 8a2:	b0 01       	movw	r22, r0
+ 8a4:	b3 9f       	mul	r27, r19
+ 8a6:	c0 01       	movw	r24, r0
+ 8a8:	a3 9f       	mul	r26, r19
+ 8aa:	70 0d       	add	r23, r0
+ 8ac:	81 1d       	adc	r24, r1
+ 8ae:	11 24       	eor	r1, r1
+ 8b0:	91 1d       	adc	r25, r1
+ 8b2:	b2 9f       	mul	r27, r18
+ 8b4:	70 0d       	add	r23, r0
+ 8b6:	81 1d       	adc	r24, r1
+ 8b8:	11 24       	eor	r1, r1
+ 8ba:	91 1d       	adc	r25, r1
+ 8bc:	08 95       	ret
 
-00000796 <_exit>:
- 796:	f8 94       	cli
+000008be <_exit>:
+ 8be:	f8 94       	cli
 
-00000798 <__stop_program>:
- 798:	ff cf       	rjmp	.-2      	; 0x798 <__stop_program>
+000008c0 <__stop_program>:
+ 8c0:	ff cf       	rjmp	.-2      	; 0x8c0 <__stop_program>
