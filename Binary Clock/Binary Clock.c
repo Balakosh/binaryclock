@@ -13,12 +13,15 @@
 #include <avr/interrupt.h>
 
 //Variablen für die Zeit
-volatile unsigned int sekunde = 0;
-volatile unsigned int minute = 0;
-volatile unsigned int stunde = 0;
+volatile unsigned int zeitSekunde = 0;
+volatile unsigned int zeitMinute = 0;
+volatile unsigned int zeitStunde = 0;
+
+volatile unsigned int weckMinute = 0;
+volatile unsigned int weckStunde = 0;
 
 volatile uint8_t statusReg = 0x00;
-volatile uint8_t updateBit = 0;
+volatile uint8_t updateBit  = 0;
 volatile uint8_t button1Bit = 1;
 volatile uint8_t button2Bit = 2;
 volatile uint8_t button3Bit = 3;
@@ -27,17 +30,29 @@ volatile uint8_t button5Bit = 5;
 volatile uint8_t button6Bit = 6;
 volatile uint8_t modeBit = 7;
 
+volatile uint8_t statusReg2 = 0x00;
+volatile uint8_t alarmOnBit = 0;
+
 void toggleLED(void){
 	PORTA ^= 0xff;
 	PORTC ^= 1<<2 | 1<<1 | 1;
 	PORTC ^= 1<<2 | 1<<1 | 1;
 }
 
-void encodeAlarmLed(){
+void beep(uint8_t count){
+	uint8_t i;
+	int delay = 10;
 	
+	for (i=0; i<= count; i++)
+	{
+		PORTD &= ~(1<<PD7);
+		_delay_ms(delay);
+		PORTD |= (1<<PD7);
+		_delay_ms(delay);
+	}
 }
 
-void encodeLed(void){
+void encodeLed(uint8_t sekunde, uint8_t minute, uint8_t stunde){
 	
 	uint8_t sz = sekunde / 10;
 	uint8_t se = sekunde % 10;
@@ -115,6 +130,8 @@ void encodeLed(void){
 	PORTC ^= 1;
 	PORTC ^= 1;
 	PORTA = 0x00;	
+	
+	statusReg &= ~(1<<updateBit);
 }
 
 int main(void)
@@ -132,7 +149,7 @@ int main(void)
 	// D-Latch Clocken (leeren/initialisieren)
 	PORTA = 0x00;
 	PORTC = 0b00000111;
-	_delay_ms(100);
+	//_delay_ms(100);
 	PORTC = 0b00000000;
 	
 	//PORTC ^= 1<<2;
@@ -140,11 +157,13 @@ int main(void)
 	//PORTC ^= 0b00000001;
 	//PORTC ^= 0b00000001;
 	
-	sei();
+	
 	
 	TCCR1B |= 1<<CS12 | 1<<WGM12;
 	TIMSK |= 1<<OCIE1A;
 	OCR1A = 31250-1;
+	
+	sei();
 	
     while(1)
     {
@@ -157,16 +176,32 @@ int main(void)
 		{
 			if (bit_is_clear(statusReg, button2Bit)) // When previously not pressed
 			{
-				if (stunde < 23)
-				{
-					stunde++;
+				if (bit_is_clear(statusReg, modeBit)){
+					if (zeitStunde < 23)
+					{
+						zeitStunde++;
+					}
+					else
+					{
+						zeitStunde = 0;
+					}
+					statusReg |= 1<<button2Bit; // Button was pressed
+					encodeLed(zeitSekunde, zeitMinute, zeitStunde);
 				}
 				else
 				{
-					stunde = 0;
+					if (weckStunde < 23)
+					{
+						weckStunde++;
+					}
+					else
+					{
+						weckStunde = 0;
+					}
+					statusReg |= 1<<button2Bit; // Button was pressed
+					encodeLed(0, weckMinute, weckStunde);
 				}
-				statusReg |= 1<<button2Bit; // Button was pressed
-				statusReg |= 1<<updateBit;
+
 			}
 		}
 		else
@@ -180,16 +215,31 @@ int main(void)
 		{
 			if (bit_is_clear(statusReg, button1Bit)) // When previously not pressed
 			{
-				if (stunde > 1)
-				{
-					stunde--;
+				if (bit_is_clear(statusReg, modeBit)){
+					if (zeitStunde > 1)
+					{
+						zeitStunde--;
+					}
+					else
+					{
+						zeitStunde = 23;
+					}
+					statusReg |= 1<<button1Bit; // Button was pressed
+					encodeLed(zeitSekunde, zeitMinute, zeitStunde);
 				}
 				else
 				{
-					stunde = 23;
+					if (weckStunde > 1)
+					{
+						weckStunde--;
+					}
+					else
+					{
+						weckStunde = 23;
+					}
+					statusReg |= 1<<button1Bit; // Button was pressed
+					encodeLed(0, weckMinute, weckStunde);
 				}
-				statusReg |= 1<<button1Bit; // Button was pressed
-				statusReg |= 1<<updateBit;
 			}
 		}
 		else
@@ -203,19 +253,34 @@ int main(void)
 		{
 			if (bit_is_clear(statusReg, button4Bit)) // When previously not pressed
 			{
-				if (minute < 59)
-				{
-					minute++;
+				if (bit_is_clear(statusReg, modeBit)){
+					if (zeitMinute < 59)
+					{
+						zeitMinute++;
+					}
+					else
+					{
+						zeitMinute = 0;
+					}
+					zeitSekunde = 0;
+					TCNT1H = 0x00;
+					TCNT1L = 0x00;
+					statusReg |= 1<<button4Bit; // Button was pressed
+					encodeLed(zeitSekunde, zeitMinute, zeitStunde);
 				}
 				else
 				{
-					minute = 0;
+					if (weckMinute < 59)
+					{
+						weckMinute++;
+					}
+					else
+					{
+						weckMinute = 0;
+					}
+					statusReg |= 1<<button4Bit; // Button was pressed
+					encodeLed(0, weckMinute, weckStunde);
 				}
-				sekunde = 0;
-				TCNT1H = 0x00;
-				TCNT1L = 0x00;
-				statusReg |= 1<<button4Bit; // Button was pressed
-				statusReg |= 1<<updateBit;
 			}
 		}
 		else
@@ -230,19 +295,34 @@ int main(void)
 		{
 			if (bit_is_clear(statusReg, button3Bit)) // When previously not pressed
 			{
-				if (minute > 1)
-				{
-					minute--;
+				if (bit_is_clear(statusReg, modeBit)){
+					if (zeitMinute > 1)
+					{
+						zeitMinute--;
+					}
+					else
+					{
+						zeitMinute = 59;
+					}
+					zeitSekunde = 0;
+					TCNT1H = 0x00;
+					TCNT1L = 0x00;
+					statusReg |= 1<<button3Bit; // Button was pressed
+					encodeLed(zeitSekunde, zeitMinute, zeitStunde);
 				}
 				else
 				{
-					minute = 59;
+					if (weckMinute > 1)
+					{
+						weckMinute--;
+					}
+					else
+					{
+						weckMinute = 59;
+					}
+					statusReg |= 1<<button3Bit; // Button was pressed
+					encodeLed(0, weckMinute, weckStunde);
 				}
-				sekunde = 0;
-				TCNT1H = 0x00;
-				TCNT1L = 0x00;
-				statusReg |= 1<<button3Bit; // Button was pressed
-				statusReg |= 1<<updateBit;
 			}
 		}
 		else
@@ -251,6 +331,7 @@ int main(void)
 		}
 		// ==================================
 				
+
 		// Toggle Alarm
 		if ( !( PIND & (1<<PIND6) ) )	// When pulled to LOW by pressing button
 		{
@@ -258,7 +339,6 @@ int main(void)
 			{
 				PORTD ^= (1<<PIND5);
 				statusReg |= 1<<button6Bit; // Button was pressed
-				//statusReg |= 1<<updateBit;
 			}
 		}
 		else
@@ -271,56 +351,62 @@ int main(void)
 		{
 			if (bit_is_clear(statusReg, button5Bit)) // When previously not pressed
 			{
-				statusReg ^= 1<<modeBit;
-				statusReg |= 1<<button5Bit; // Button was pressed
-				statusReg |= 1<<updateBit;
+				if ((zeitStunde == weckStunde) && (zeitMinute == weckMinute))
+				{
+					statusReg2 &= ~(1<<alarmOnBit);
+				}
+				else
+				{
+					statusReg ^= 1<<modeBit;
+					statusReg |= 1<<button5Bit; // Button was pressed
+					if (bit_is_clear(statusReg, modeBit))
+					{
+						encodeLed(zeitSekunde, zeitMinute, zeitStunde);
+					}
+				}
+
 			}
 		}
 		else
 		{
 			statusReg &= ~(1<<button5Bit); // Button is not pressed
 		}
-		
-		/*
-		
+
 		// Normal mode or Alarm mode?
-		if (bit_is_clear(statusReg, modeBit))
+		if (bit_is_set(statusReg, modeBit))
 		{
-			//encodeLed();
+			encodeLed(0, weckMinute, weckStunde);
 		}
-		else
-		{
-			encodeAlarmLed();
-		}
-		
-		if ((bit_is_set(statusReg, updateBit)))// && (bit_is_clear(statusReg, modeBit)))
-		{
-			encodeLed();
-			statusReg &= ~(1<<updateBit);
-		}
-		*/
-		
-		encodeLed();
 		
     } // while end
 }
 
 ISR (TIMER1_COMPA_vect)
 {
-	sekunde++;
-	if(sekunde == 60)
+	zeitSekunde++;
+	if(zeitSekunde == 60)
 	{
-		minute++;
-		sekunde = 0;
+		zeitMinute++;
+		zeitSekunde = 0;
+		statusReg2 |= (1<<alarmOnBit);
 	}
-	if(minute == 60)
+	if(zeitMinute == 60)
 	{
-		stunde++;
-		minute = 0;
+		zeitStunde++;
+		zeitMinute = 0;
 	}
-	if(stunde == 24)
+	if(zeitStunde == 24)
 	{
-		stunde = 0;
+		zeitStunde = 0;
 	}
-	statusReg |= 1<<updateBit;
+
+	if ((bit_is_clear(statusReg, modeBit)))
+	{
+		encodeLed(zeitSekunde, zeitMinute, zeitStunde);
+	}
+	
+	if ((zeitMinute == weckMinute) && (zeitStunde == weckStunde) && (bit_is_set(statusReg2, alarmOnBit)) && (bit_is_set(PORTD, PD5)))
+	{
+		beep(1);
+	}
 }

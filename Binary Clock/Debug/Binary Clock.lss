@@ -3,29 +3,29 @@ Binary Clock.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         000008c2  00000000  00000000  00000094  2**1
+  0 .text         00000b10  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .data         00000008  00800060  000008c2  00000956  2**0
+  1 .data         00000008  00800060  00000b10  00000ba4  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .bss          00000008  00800068  00800068  0000095e  2**0
+  2 .bss          0000000e  00800068  00800068  00000bac  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  0000095e  2**0
+  3 .comment      00000030  00000000  00000000  00000bac  2**0
                   CONTENTS, READONLY
-  4 .debug_aranges 00000040  00000000  00000000  0000098e  2**0
+  4 .debug_aranges 00000040  00000000  00000000  00000bdc  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_info   000003e5  00000000  00000000  000009ce  2**0
+  5 .debug_info   00000559  00000000  00000000  00000c1c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_abbrev 00000158  00000000  00000000  00000db3  2**0
+  6 .debug_abbrev 000001be  00000000  00000000  00001175  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_line   000001fd  00000000  00000000  00000f0b  2**0
+  7 .debug_line   00000288  00000000  00000000  00001333  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_frame  000000f4  00000000  00000000  00001108  2**2
+  8 .debug_frame  0000010c  00000000  00000000  000015bc  2**2
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    00000216  00000000  00000000  000011fc  2**0
+  9 .debug_str    00000266  00000000  00000000  000016c8  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_loc    00000402  00000000  00000000  00001412  2**0
+ 10 .debug_loc    00000a9c  00000000  00000000  0000192e  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_ranges 00000030  00000000  00000000  00001814  2**0
+ 11 .debug_ranges 00000030  00000000  00000000  000023ca  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -38,7 +38,7 @@ Disassembly of section .text:
   10:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
   14:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
   18:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
-  1c:	0c 94 ef 03 	jmp	0x7de	; 0x7de <__vector_7>
+  1c:	0c 94 da 04 	jmp	0x9b4	; 0x9b4 <__vector_7>
   20:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
   24:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
   28:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
@@ -65,8 +65,8 @@ Disassembly of section .text:
   60:	10 e0       	ldi	r17, 0x00	; 0
   62:	a0 e6       	ldi	r26, 0x60	; 96
   64:	b0 e0       	ldi	r27, 0x00	; 0
-  66:	e2 ec       	ldi	r30, 0xC2	; 194
-  68:	f8 e0       	ldi	r31, 0x08	; 8
+  66:	e0 e1       	ldi	r30, 0x10	; 16
+  68:	fb e0       	ldi	r31, 0x0B	; 11
   6a:	02 c0       	rjmp	.+4      	; 0x70 <__do_copy_data+0x10>
   6c:	05 90       	lpm	r0, Z+
   6e:	0d 92       	st	X+, r0
@@ -84,1205 +84,1483 @@ Disassembly of section .text:
   7e:	1d 92       	st	X+, r1
 
 00000080 <.do_clear_bss_start>:
-  80:	a0 37       	cpi	r26, 0x70	; 112
+  80:	a6 37       	cpi	r26, 0x76	; 118
   82:	b2 07       	cpc	r27, r18
   84:	e1 f7       	brne	.-8      	; 0x7e <.do_clear_bss_loop>
-  86:	0e 94 00 02 	call	0x400	; 0x400 <main>
-  8a:	0c 94 5f 04 	jmp	0x8be	; 0x8be <_exit>
+  86:	0e 94 c5 01 	call	0x38a	; 0x38a <main>
+  8a:	0c 94 86 05 	jmp	0xb0c	; 0xb0c <_exit>
 
 0000008e <__bad_interrupt>:
   8e:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
-00000092 <encodeLed>:
+00000092 <beep>:
 
-void encodeAlarmLed(){
+void beep(uint8_t count){
+	uint8_t i;
+	int delay = 10;
 	
-}
-
-void encodeLed(void){
-  92:	2f 92       	push	r2
-  94:	3f 92       	push	r3
-  96:	4f 92       	push	r4
-  98:	5f 92       	push	r5
-  9a:	6f 92       	push	r6
-  9c:	7f 92       	push	r7
-  9e:	8f 92       	push	r8
-  a0:	9f 92       	push	r9
-  a2:	af 92       	push	r10
-  a4:	bf 92       	push	r11
-  a6:	cf 92       	push	r12
-  a8:	df 92       	push	r13
-  aa:	ef 92       	push	r14
-  ac:	ff 92       	push	r15
-  ae:	0f 93       	push	r16
-  b0:	1f 93       	push	r17
-  b2:	cf 93       	push	r28
-  b4:	df 93       	push	r29
-  b6:	cd b7       	in	r28, 0x3d	; 61
-  b8:	de b7       	in	r29, 0x3e	; 62
-  ba:	6a 97       	sbiw	r28, 0x1a	; 26
-  bc:	0f b6       	in	r0, 0x3f	; 63
-  be:	f8 94       	cli
-  c0:	de bf       	out	0x3e, r29	; 62
-  c2:	0f be       	out	0x3f, r0	; 63
-  c4:	cd bf       	out	0x3d, r28	; 61
-	
-	uint8_t sz = sekunde / 10;
-  c6:	20 91 6e 00 	lds	r18, 0x006E
-  ca:	30 91 6f 00 	lds	r19, 0x006F
-  ce:	ad ec       	ldi	r26, 0xCD	; 205
-  d0:	bc ec       	ldi	r27, 0xCC	; 204
-  d2:	0e 94 50 04 	call	0x8a0	; 0x8a0 <__umulhisi3>
-  d6:	8c 01       	movw	r16, r24
-  d8:	16 95       	lsr	r17
-  da:	07 95       	ror	r16
-  dc:	16 95       	lsr	r17
-  de:	07 95       	ror	r16
-  e0:	16 95       	lsr	r17
-  e2:	07 95       	ror	r16
-	uint8_t se = sekunde % 10;
-  e4:	e0 91 6e 00 	lds	r30, 0x006E
-  e8:	f0 91 6f 00 	lds	r31, 0x006F
-  ec:	9f 01       	movw	r18, r30
-  ee:	0e 94 50 04 	call	0x8a0	; 0x8a0 <__umulhisi3>
-  f2:	96 95       	lsr	r25
-  f4:	87 95       	ror	r24
-  f6:	96 95       	lsr	r25
-  f8:	87 95       	ror	r24
-  fa:	96 95       	lsr	r25
-  fc:	87 95       	ror	r24
-  fe:	9c 01       	movw	r18, r24
- 100:	22 0f       	add	r18, r18
- 102:	33 1f       	adc	r19, r19
- 104:	88 0f       	add	r24, r24
- 106:	99 1f       	adc	r25, r25
- 108:	88 0f       	add	r24, r24
- 10a:	99 1f       	adc	r25, r25
- 10c:	88 0f       	add	r24, r24
- 10e:	99 1f       	adc	r25, r25
- 110:	82 0f       	add	r24, r18
- 112:	93 1f       	adc	r25, r19
- 114:	e8 1b       	sub	r30, r24
- 116:	f9 0b       	sbc	r31, r25
-	
-	uint8_t mz = minute / 10;
- 118:	20 91 6c 00 	lds	r18, 0x006C
- 11c:	30 91 6d 00 	lds	r19, 0x006D
- 120:	0e 94 50 04 	call	0x8a0	; 0x8a0 <__umulhisi3>
- 124:	96 95       	lsr	r25
- 126:	87 95       	ror	r24
- 128:	96 95       	lsr	r25
- 12a:	87 95       	ror	r24
- 12c:	96 95       	lsr	r25
- 12e:	87 95       	ror	r24
- 130:	9a 8f       	std	Y+26, r25	; 0x1a
- 132:	89 8f       	std	Y+25, r24	; 0x19
-	uint8_t me = minute % 10;
- 134:	40 91 6c 00 	lds	r20, 0x006C
- 138:	50 91 6d 00 	lds	r21, 0x006D
- 13c:	9a 01       	movw	r18, r20
- 13e:	0e 94 50 04 	call	0x8a0	; 0x8a0 <__umulhisi3>
- 142:	96 95       	lsr	r25
- 144:	87 95       	ror	r24
- 146:	96 95       	lsr	r25
- 148:	87 95       	ror	r24
- 14a:	96 95       	lsr	r25
- 14c:	87 95       	ror	r24
- 14e:	9c 01       	movw	r18, r24
- 150:	22 0f       	add	r18, r18
- 152:	33 1f       	adc	r19, r19
- 154:	88 0f       	add	r24, r24
- 156:	99 1f       	adc	r25, r25
- 158:	88 0f       	add	r24, r24
- 15a:	99 1f       	adc	r25, r25
- 15c:	88 0f       	add	r24, r24
- 15e:	99 1f       	adc	r25, r25
- 160:	82 0f       	add	r24, r18
- 162:	93 1f       	adc	r25, r19
- 164:	48 1b       	sub	r20, r24
- 166:	59 0b       	sbc	r21, r25
-	
-	uint8_t hz = stunde / 10;
- 168:	20 91 6a 00 	lds	r18, 0x006A
- 16c:	30 91 6b 00 	lds	r19, 0x006B
- 170:	0e 94 50 04 	call	0x8a0	; 0x8a0 <__umulhisi3>
- 174:	4c 01       	movw	r8, r24
- 176:	96 94       	lsr	r9
- 178:	87 94       	ror	r8
- 17a:	96 94       	lsr	r9
- 17c:	87 94       	ror	r8
- 17e:	96 94       	lsr	r9
- 180:	87 94       	ror	r8
-	uint8_t he = stunde % 10;
- 182:	60 90 6a 00 	lds	r6, 0x006A
- 186:	70 90 6b 00 	lds	r7, 0x006B
- 18a:	93 01       	movw	r18, r6
- 18c:	0e 94 50 04 	call	0x8a0	; 0x8a0 <__umulhisi3>
- 190:	96 95       	lsr	r25
- 192:	87 95       	ror	r24
- 194:	96 95       	lsr	r25
- 196:	87 95       	ror	r24
- 198:	96 95       	lsr	r25
- 19a:	87 95       	ror	r24
- 19c:	9c 01       	movw	r18, r24
- 19e:	22 0f       	add	r18, r18
- 1a0:	33 1f       	adc	r19, r19
- 1a2:	88 0f       	add	r24, r24
- 1a4:	99 1f       	adc	r25, r25
- 1a6:	88 0f       	add	r24, r24
- 1a8:	99 1f       	adc	r25, r25
- 1aa:	88 0f       	add	r24, r24
- 1ac:	99 1f       	adc	r25, r25
- 1ae:	82 0f       	add	r24, r18
- 1b0:	93 1f       	adc	r25, r19
- 1b2:	68 1a       	sub	r6, r24
- 1b4:	79 0a       	sbc	r7, r25
-	uint8_t hz2 = hz >> 1;
-	hz2 &= ~0b11111110;
-	uint8_t hz1 = hz & ~0b11111110;
-	
-	// IC2 clocken
-	PORTA = 0x00;
- 1b6:	1b ba       	out	0x1b, r1	; 27
-	PORTA |= se8<<4 | se4<<7 | me8<<5 | he8<<6;
- 1b8:	8b b3       	in	r24, 0x1b	; 27
- 1ba:	e3 fb       	bst	r30, 3
- 1bc:	aa 24       	eor	r10, r10
- 1be:	a0 f8       	bld	r10, 0
- 1c0:	b1 2c       	mov	r11, r1
- 1c2:	aa 0c       	add	r10, r10
- 1c4:	bb 1c       	adc	r11, r11
- 1c6:	aa 0c       	add	r10, r10
- 1c8:	bb 1c       	adc	r11, r11
- 1ca:	aa 0c       	add	r10, r10
- 1cc:	bb 1c       	adc	r11, r11
- 1ce:	aa 0c       	add	r10, r10
- 1d0:	bb 1c       	adc	r11, r11
- 1d2:	e2 fb       	bst	r30, 2
- 1d4:	cc 24       	eor	r12, r12
- 1d6:	c0 f8       	bld	r12, 0
- 1d8:	d1 2c       	mov	r13, r1
- 1da:	d6 94       	lsr	r13
- 1dc:	dc 2c       	mov	r13, r12
- 1de:	cc 24       	eor	r12, r12
- 1e0:	d7 94       	ror	r13
- 1e2:	c7 94       	ror	r12
- 1e4:	ca 28       	or	r12, r10
- 1e6:	c8 2a       	or	r12, r24
- 1e8:	43 fb       	bst	r20, 3
- 1ea:	ee 24       	eor	r14, r14
- 1ec:	e0 f8       	bld	r14, 0
- 1ee:	f1 2c       	mov	r15, r1
- 1f0:	ee 0c       	add	r14, r14
- 1f2:	ff 1c       	adc	r15, r15
- 1f4:	ee 0c       	add	r14, r14
- 1f6:	ff 1c       	adc	r15, r15
- 1f8:	ee 0c       	add	r14, r14
- 1fa:	ff 1c       	adc	r15, r15
- 1fc:	ee 0c       	add	r14, r14
- 1fe:	ff 1c       	adc	r15, r15
- 200:	ee 0c       	add	r14, r14
- 202:	ff 1c       	adc	r15, r15
- 204:	ec 28       	or	r14, r12
- 206:	63 fa       	bst	r6, 3
- 208:	44 24       	eor	r4, r4
- 20a:	40 f8       	bld	r4, 0
- 20c:	51 2c       	mov	r5, r1
- 20e:	00 24       	eor	r0, r0
- 210:	56 94       	lsr	r5
- 212:	47 94       	ror	r4
- 214:	07 94       	ror	r0
- 216:	56 94       	lsr	r5
- 218:	47 94       	ror	r4
- 21a:	07 94       	ror	r0
- 21c:	54 2c       	mov	r5, r4
- 21e:	40 2c       	mov	r4, r0
- 220:	4e 28       	or	r4, r14
- 222:	4b ba       	out	0x1b, r4	; 27
-	PORTC ^= 1<<2;
- 224:	95 b3       	in	r25, 0x15	; 21
- 226:	84 e0       	ldi	r24, 0x04	; 4
- 228:	98 27       	eor	r25, r24
- 22a:	95 bb       	out	0x15, r25	; 21
-	PORTC ^= 1<<2;
- 22c:	95 b3       	in	r25, 0x15	; 21
- 22e:	89 27       	eor	r24, r25
- 230:	85 bb       	out	0x15, r24	; 21
-	PORTA = 0x00;
- 232:	1b ba       	out	0x1b, r1	; 27
-	
-	
-	// IC3 clocken
-	PORTA = 0x00;
- 234:	1b ba       	out	0x1b, r1	; 27
-	PORTA |= se2<<4 | sz4 | sz2<<5 | me4<<1 | mz4<<2 | he4<<3 | me2<<6 | hz2<<7;
- 236:	8b b3       	in	r24, 0x1b	; 27
-	se2 &= ~0b11111110;
-	uint8_t se1 = se & ~0b11111110;
-	
-	// LED status bestimmen Sekunden Zehner
-	uint8_t sz4 = sz >> 2;
-	sz4 &= ~0b11111110;
- 238:	02 fb       	bst	r16, 2
- 23a:	22 27       	eor	r18, r18
- 23c:	20 f9       	bld	r18, 0
-	PORTA = 0x00;
-	
-	
-	// IC3 clocken
-	PORTA = 0x00;
-	PORTA |= se2<<4 | sz4 | sz2<<5 | me4<<1 | mz4<<2 | he4<<3 | me2<<6 | hz2<<7;
- 23e:	28 2b       	or	r18, r24
- 240:	e1 fb       	bst	r30, 1
- 242:	22 24       	eor	r2, r2
- 244:	20 f8       	bld	r2, 0
- 246:	31 2c       	mov	r3, r1
- 248:	22 0c       	add	r2, r2
- 24a:	33 1c       	adc	r3, r3
- 24c:	22 0c       	add	r2, r2
- 24e:	33 1c       	adc	r3, r3
- 250:	22 0c       	add	r2, r2
- 252:	33 1c       	adc	r3, r3
- 254:	22 0c       	add	r2, r2
- 256:	33 1c       	adc	r3, r3
- 258:	22 2a       	or	r2, r18
- 25a:	01 fb       	bst	r16, 1
- 25c:	88 27       	eor	r24, r24
- 25e:	80 f9       	bld	r24, 0
- 260:	89 83       	std	Y+1, r24	; 0x01
- 262:	1a 82       	std	Y+2, r1	; 0x02
- 264:	29 81       	ldd	r18, Y+1	; 0x01
- 266:	3a 81       	ldd	r19, Y+2	; 0x02
- 268:	22 0f       	add	r18, r18
- 26a:	33 1f       	adc	r19, r19
- 26c:	22 95       	swap	r18
- 26e:	32 95       	swap	r19
- 270:	30 7f       	andi	r19, 0xF0	; 240
- 272:	32 27       	eor	r19, r18
- 274:	20 7f       	andi	r18, 0xF0	; 240
- 276:	32 27       	eor	r19, r18
- 278:	22 29       	or	r18, r2
- 27a:	42 fb       	bst	r20, 2
- 27c:	99 27       	eor	r25, r25
- 27e:	90 f9       	bld	r25, 0
- 280:	9b 83       	std	Y+3, r25	; 0x03
- 282:	1c 82       	std	Y+4, r1	; 0x04
- 284:	8b 81       	ldd	r24, Y+3	; 0x03
- 286:	9c 81       	ldd	r25, Y+4	; 0x04
- 288:	88 0f       	add	r24, r24
- 28a:	99 1f       	adc	r25, r25
- 28c:	82 2b       	or	r24, r18
- 28e:	69 8d       	ldd	r22, Y+25	; 0x19
- 290:	64 70       	andi	r22, 0x04	; 4
- 292:	86 2b       	or	r24, r22
- 294:	62 fa       	bst	r6, 2
- 296:	aa 27       	eor	r26, r26
- 298:	a0 f9       	bld	r26, 0
- 29a:	ad 83       	std	Y+5, r26	; 0x05
- 29c:	1e 82       	std	Y+6, r1	; 0x06
- 29e:	6d 81       	ldd	r22, Y+5	; 0x05
- 2a0:	7e 81       	ldd	r23, Y+6	; 0x06
- 2a2:	66 0f       	add	r22, r22
- 2a4:	77 1f       	adc	r23, r23
- 2a6:	66 0f       	add	r22, r22
- 2a8:	77 1f       	adc	r23, r23
- 2aa:	66 0f       	add	r22, r22
- 2ac:	77 1f       	adc	r23, r23
- 2ae:	68 2b       	or	r22, r24
- 2b0:	41 fb       	bst	r20, 1
- 2b2:	bb 27       	eor	r27, r27
- 2b4:	b0 f9       	bld	r27, 0
- 2b6:	bf 83       	std	Y+7, r27	; 0x07
- 2b8:	18 86       	std	Y+8, r1	; 0x08
- 2ba:	2f 81       	ldd	r18, Y+7	; 0x07
- 2bc:	38 85       	ldd	r19, Y+8	; 0x08
- 2be:	00 24       	eor	r0, r0
- 2c0:	36 95       	lsr	r19
- 2c2:	27 95       	ror	r18
- 2c4:	07 94       	ror	r0
- 2c6:	36 95       	lsr	r19
- 2c8:	27 95       	ror	r18
- 2ca:	07 94       	ror	r0
- 2cc:	32 2f       	mov	r19, r18
- 2ce:	20 2d       	mov	r18, r0
- 2d0:	26 2b       	or	r18, r22
- 2d2:	81 fa       	bst	r8, 1
- 2d4:	88 27       	eor	r24, r24
- 2d6:	80 f9       	bld	r24, 0
- 2d8:	89 87       	std	Y+9, r24	; 0x09
- 2da:	1a 86       	std	Y+10, r1	; 0x0a
- 2dc:	89 85       	ldd	r24, Y+9	; 0x09
- 2de:	9a 85       	ldd	r25, Y+10	; 0x0a
- 2e0:	96 95       	lsr	r25
- 2e2:	98 2f       	mov	r25, r24
- 2e4:	88 27       	eor	r24, r24
- 2e6:	97 95       	ror	r25
- 2e8:	87 95       	ror	r24
- 2ea:	82 2b       	or	r24, r18
- 2ec:	8b bb       	out	0x1b, r24	; 27
-	PORTC ^= 1<<1;
- 2ee:	95 b3       	in	r25, 0x15	; 21
- 2f0:	82 e0       	ldi	r24, 0x02	; 2
- 2f2:	98 27       	eor	r25, r24
- 2f4:	95 bb       	out	0x15, r25	; 21
-	PORTC ^= 1<<1;
- 2f6:	95 b3       	in	r25, 0x15	; 21
- 2f8:	89 27       	eor	r24, r25
- 2fa:	85 bb       	out	0x15, r24	; 21
-	PORTA = 0x00;
- 2fc:	1b ba       	out	0x1b, r1	; 27
-	
-	// IC4 clocken
-	PORTA = 0x00;
- 2fe:	1b ba       	out	0x1b, r1	; 27
-	PORTA |= se1 | sz1<<1 | me1<<2 | mz1<<3 | he1<<4 | hz1<<5 | mz2<<6 | he2<<7;
- 300:	8b b3       	in	r24, 0x1b	; 27
-	se8 &= ~0b11111110;
-	uint8_t se4 = se >> 2;
-	se4 &= ~0b11111110;
-	uint8_t se2 = se >> 1;
-	se2 &= ~0b11111110;
-	uint8_t se1 = se & ~0b11111110;
- 302:	e1 70       	andi	r30, 0x01	; 1
-	PORTC ^= 1<<1;
-	PORTA = 0x00;
-	
-	// IC4 clocken
-	PORTA = 0x00;
-	PORTA |= se1 | sz1<<1 | me1<<2 | mz1<<3 | he1<<4 | hz1<<5 | mz2<<6 | he2<<7;
- 304:	e8 2b       	or	r30, r24
- 306:	90 2f       	mov	r25, r16
- 308:	91 70       	andi	r25, 0x01	; 1
- 30a:	9b 87       	std	Y+11, r25	; 0x0b
- 30c:	1c 86       	std	Y+12, r1	; 0x0c
- 30e:	8b 85       	ldd	r24, Y+11	; 0x0b
- 310:	9c 85       	ldd	r25, Y+12	; 0x0c
- 312:	88 0f       	add	r24, r24
- 314:	99 1f       	adc	r25, r25
- 316:	8e 2b       	or	r24, r30
- 318:	a4 2f       	mov	r26, r20
- 31a:	a1 70       	andi	r26, 0x01	; 1
- 31c:	ad 87       	std	Y+13, r26	; 0x0d
- 31e:	1e 86       	std	Y+14, r1	; 0x0e
- 320:	4d 85       	ldd	r20, Y+13	; 0x0d
- 322:	5e 85       	ldd	r21, Y+14	; 0x0e
- 324:	44 0f       	add	r20, r20
- 326:	55 1f       	adc	r21, r21
- 328:	44 0f       	add	r20, r20
- 32a:	55 1f       	adc	r21, r21
- 32c:	48 2b       	or	r20, r24
- 32e:	b9 8d       	ldd	r27, Y+25	; 0x19
- 330:	b1 70       	andi	r27, 0x01	; 1
- 332:	bf 87       	std	Y+15, r27	; 0x0f
- 334:	18 8a       	std	Y+16, r1	; 0x10
- 336:	2f 85       	ldd	r18, Y+15	; 0x0f
- 338:	38 89       	ldd	r19, Y+16	; 0x10
- 33a:	22 0f       	add	r18, r18
- 33c:	33 1f       	adc	r19, r19
- 33e:	22 0f       	add	r18, r18
- 340:	33 1f       	adc	r19, r19
- 342:	22 0f       	add	r18, r18
- 344:	33 1f       	adc	r19, r19
- 346:	24 2b       	or	r18, r20
- 348:	e6 2d       	mov	r30, r6
- 34a:	e1 70       	andi	r30, 0x01	; 1
- 34c:	e9 8b       	std	Y+17, r30	; 0x11
- 34e:	1a 8a       	std	Y+18, r1	; 0x12
- 350:	89 89       	ldd	r24, Y+17	; 0x11
- 352:	9a 89       	ldd	r25, Y+18	; 0x12
- 354:	82 95       	swap	r24
- 356:	92 95       	swap	r25
- 358:	90 7f       	andi	r25, 0xF0	; 240
- 35a:	98 27       	eor	r25, r24
- 35c:	80 7f       	andi	r24, 0xF0	; 240
- 35e:	98 27       	eor	r25, r24
- 360:	82 2b       	or	r24, r18
- 362:	f8 2d       	mov	r31, r8
- 364:	f1 70       	andi	r31, 0x01	; 1
- 366:	fb 8b       	std	Y+19, r31	; 0x13
- 368:	1c 8a       	std	Y+20, r1	; 0x14
- 36a:	4b 89       	ldd	r20, Y+19	; 0x13
- 36c:	5c 89       	ldd	r21, Y+20	; 0x14
- 36e:	44 0f       	add	r20, r20
- 370:	55 1f       	adc	r21, r21
- 372:	42 95       	swap	r20
- 374:	52 95       	swap	r21
- 376:	50 7f       	andi	r21, 0xF0	; 240
- 378:	54 27       	eor	r21, r20
- 37a:	40 7f       	andi	r20, 0xF0	; 240
- 37c:	54 27       	eor	r21, r20
- 37e:	48 2b       	or	r20, r24
- 380:	89 8d       	ldd	r24, Y+25	; 0x19
- 382:	86 95       	lsr	r24
- 384:	81 70       	andi	r24, 0x01	; 1
- 386:	8d 8b       	std	Y+21, r24	; 0x15
- 388:	1e 8a       	std	Y+22, r1	; 0x16
- 38a:	2d 89       	ldd	r18, Y+21	; 0x15
- 38c:	3e 89       	ldd	r19, Y+22	; 0x16
- 38e:	00 24       	eor	r0, r0
- 390:	36 95       	lsr	r19
- 392:	27 95       	ror	r18
- 394:	07 94       	ror	r0
- 396:	36 95       	lsr	r19
- 398:	27 95       	ror	r18
- 39a:	07 94       	ror	r0
- 39c:	32 2f       	mov	r19, r18
- 39e:	20 2d       	mov	r18, r0
- 3a0:	24 2b       	or	r18, r20
- 3a2:	61 fa       	bst	r6, 1
- 3a4:	99 27       	eor	r25, r25
- 3a6:	90 f9       	bld	r25, 0
- 3a8:	9f 8b       	std	Y+23, r25	; 0x17
- 3aa:	18 8e       	std	Y+24, r1	; 0x18
- 3ac:	8f 89       	ldd	r24, Y+23	; 0x17
- 3ae:	98 8d       	ldd	r25, Y+24	; 0x18
- 3b0:	96 95       	lsr	r25
- 3b2:	98 2f       	mov	r25, r24
- 3b4:	88 27       	eor	r24, r24
- 3b6:	97 95       	ror	r25
- 3b8:	87 95       	ror	r24
- 3ba:	82 2b       	or	r24, r18
- 3bc:	8b bb       	out	0x1b, r24	; 27
-	PORTC ^= 1;
- 3be:	95 b3       	in	r25, 0x15	; 21
- 3c0:	81 e0       	ldi	r24, 0x01	; 1
- 3c2:	98 27       	eor	r25, r24
- 3c4:	95 bb       	out	0x15, r25	; 21
-	PORTC ^= 1;
- 3c6:	95 b3       	in	r25, 0x15	; 21
- 3c8:	89 27       	eor	r24, r25
- 3ca:	85 bb       	out	0x15, r24	; 21
-	PORTA = 0x00;	
- 3cc:	1b ba       	out	0x1b, r1	; 27
-}
- 3ce:	6a 96       	adiw	r28, 0x1a	; 26
- 3d0:	0f b6       	in	r0, 0x3f	; 63
- 3d2:	f8 94       	cli
- 3d4:	de bf       	out	0x3e, r29	; 62
- 3d6:	0f be       	out	0x3f, r0	; 63
- 3d8:	cd bf       	out	0x3d, r28	; 61
- 3da:	df 91       	pop	r29
- 3dc:	cf 91       	pop	r28
- 3de:	1f 91       	pop	r17
- 3e0:	0f 91       	pop	r16
- 3e2:	ff 90       	pop	r15
- 3e4:	ef 90       	pop	r14
- 3e6:	df 90       	pop	r13
- 3e8:	cf 90       	pop	r12
- 3ea:	bf 90       	pop	r11
- 3ec:	af 90       	pop	r10
- 3ee:	9f 90       	pop	r9
- 3f0:	8f 90       	pop	r8
- 3f2:	7f 90       	pop	r7
- 3f4:	6f 90       	pop	r6
- 3f6:	5f 90       	pop	r5
- 3f8:	4f 90       	pop	r4
- 3fa:	3f 90       	pop	r3
- 3fc:	2f 90       	pop	r2
- 3fe:	08 95       	ret
-
-00000400 <main>:
-
-int main(void)
-{
-	DDRA = 0xff;
- 400:	8f ef       	ldi	r24, 0xFF	; 255
- 402:	8a bb       	out	0x1a, r24	; 26
-	DDRB = 0b11100000;
- 404:	90 ee       	ldi	r25, 0xE0	; 224
- 406:	97 bb       	out	0x17, r25	; 23
-	DDRC = 0xff;
- 408:	84 bb       	out	0x14, r24	; 20
-	DDRD = 0b10111111;
- 40a:	9f eb       	ldi	r25, 0xBF	; 191
- 40c:	91 bb       	out	0x11, r25	; 17
-	
-	PORTA = 0xff;
- 40e:	8b bb       	out	0x1b, r24	; 27
-	PORTB = 0b00011111;
- 410:	8f e1       	ldi	r24, 0x1F	; 31
- 412:	88 bb       	out	0x18, r24	; 24
-	PORTC = 0x00;
- 414:	15 ba       	out	0x15, r1	; 21
-	PORTD = 0b11000000;
- 416:	80 ec       	ldi	r24, 0xC0	; 192
- 418:	82 bb       	out	0x12, r24	; 18
-	
-	// D-Latch Clocken (leeren/initialisieren)
-	PORTA = 0x00;
- 41a:	1b ba       	out	0x1b, r1	; 27
-	PORTC = 0b00000111;
- 41c:	87 e0       	ldi	r24, 0x07	; 7
- 41e:	85 bb       	out	0x15, r24	; 21
+	for (i=0; i<= count; i++)
+  92:	90 e0       	ldi	r25, 0x00	; 0
+	{
+		PORTD &= ~(1<<PD7);
+  94:	97 98       	cbi	0x12, 7	; 18
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
- 420:	2f ef       	ldi	r18, 0xFF	; 255
- 422:	40 e7       	ldi	r20, 0x70	; 112
- 424:	52 e0       	ldi	r21, 0x02	; 2
- 426:	21 50       	subi	r18, 0x01	; 1
- 428:	40 40       	sbci	r20, 0x00	; 0
- 42a:	50 40       	sbci	r21, 0x00	; 0
- 42c:	e1 f7       	brne	.-8      	; 0x426 <main+0x26>
- 42e:	00 c0       	rjmp	.+0      	; 0x430 <main+0x30>
- 430:	00 00       	nop
-	_delay_ms(100);
+  96:	ef e1       	ldi	r30, 0x1F	; 31
+  98:	fe e4       	ldi	r31, 0x4E	; 78
+  9a:	31 97       	sbiw	r30, 0x01	; 1
+  9c:	f1 f7       	brne	.-4      	; 0x9a <beep+0x8>
+  9e:	00 c0       	rjmp	.+0      	; 0xa0 <beep+0xe>
+  a0:	00 00       	nop
+		_delay_ms(delay);
+		PORTD |= (1<<PD7);
+  a2:	97 9a       	sbi	0x12, 7	; 18
+  a4:	ef e1       	ldi	r30, 0x1F	; 31
+  a6:	fe e4       	ldi	r31, 0x4E	; 78
+  a8:	31 97       	sbiw	r30, 0x01	; 1
+  aa:	f1 f7       	brne	.-4      	; 0xa8 <beep+0x16>
+  ac:	00 c0       	rjmp	.+0      	; 0xae <beep+0x1c>
+  ae:	00 00       	nop
+
+void beep(uint8_t count){
+	uint8_t i;
+	int delay = 10;
+	
+	for (i=0; i<= count; i++)
+  b0:	9f 5f       	subi	r25, 0xFF	; 255
+  b2:	89 17       	cp	r24, r25
+  b4:	78 f7       	brcc	.-34     	; 0x94 <beep+0x2>
+		PORTD &= ~(1<<PD7);
+		_delay_ms(delay);
+		PORTD |= (1<<PD7);
+		_delay_ms(delay);
+	}
+}
+  b6:	08 95       	ret
+
+000000b8 <encodeLed>:
+
+void encodeLed(uint8_t sekunde, uint8_t minute, uint8_t stunde){
+  b8:	2f 92       	push	r2
+  ba:	3f 92       	push	r3
+  bc:	4f 92       	push	r4
+  be:	5f 92       	push	r5
+  c0:	6f 92       	push	r6
+  c2:	7f 92       	push	r7
+  c4:	8f 92       	push	r8
+  c6:	9f 92       	push	r9
+  c8:	af 92       	push	r10
+  ca:	bf 92       	push	r11
+  cc:	cf 92       	push	r12
+  ce:	df 92       	push	r13
+  d0:	ef 92       	push	r14
+  d2:	ff 92       	push	r15
+  d4:	0f 93       	push	r16
+  d6:	1f 93       	push	r17
+  d8:	cf 93       	push	r28
+  da:	df 93       	push	r29
+  dc:	cd b7       	in	r28, 0x3d	; 61
+  de:	de b7       	in	r29, 0x3e	; 62
+  e0:	2e 97       	sbiw	r28, 0x0e	; 14
+  e2:	0f b6       	in	r0, 0x3f	; 63
+  e4:	f8 94       	cli
+  e6:	de bf       	out	0x3e, r29	; 62
+  e8:	0f be       	out	0x3f, r0	; 63
+  ea:	cd bf       	out	0x3d, r28	; 61
+	
+	uint8_t sz = sekunde / 10;
+  ec:	7d ec       	ldi	r23, 0xCD	; 205
+  ee:	87 9f       	mul	r24, r23
+  f0:	51 2d       	mov	r21, r1
+  f2:	11 24       	eor	r1, r1
+  f4:	56 95       	lsr	r21
+  f6:	56 95       	lsr	r21
+  f8:	56 95       	lsr	r21
+	uint8_t se = sekunde % 10;
+  fa:	95 2f       	mov	r25, r21
+  fc:	99 0f       	add	r25, r25
+  fe:	59 2e       	mov	r5, r25
+ 100:	55 0c       	add	r5, r5
+ 102:	55 0c       	add	r5, r5
+ 104:	95 0d       	add	r25, r5
+ 106:	89 1b       	sub	r24, r25
+	
+	uint8_t mz = minute / 10;
+ 108:	67 9f       	mul	r22, r23
+ 10a:	91 2d       	mov	r25, r1
+ 10c:	11 24       	eor	r1, r1
+ 10e:	96 95       	lsr	r25
+ 110:	96 95       	lsr	r25
+ 112:	96 95       	lsr	r25
+	uint8_t me = minute % 10;
+ 114:	59 2e       	mov	r5, r25
+ 116:	55 0c       	add	r5, r5
+ 118:	45 2c       	mov	r4, r5
+ 11a:	44 0c       	add	r4, r4
+ 11c:	44 0c       	add	r4, r4
+ 11e:	54 0c       	add	r5, r4
+ 120:	65 19       	sub	r22, r5
+	
+	uint8_t hz = stunde / 10;
+ 122:	47 9f       	mul	r20, r23
+ 124:	71 2d       	mov	r23, r1
+ 126:	11 24       	eor	r1, r1
+ 128:	76 95       	lsr	r23
+ 12a:	76 95       	lsr	r23
+ 12c:	76 95       	lsr	r23
+	uint8_t he = stunde % 10;
+ 12e:	57 2e       	mov	r5, r23
+ 130:	55 0c       	add	r5, r5
+ 132:	45 2c       	mov	r4, r5
+ 134:	44 0c       	add	r4, r4
+ 136:	44 0c       	add	r4, r4
+ 138:	54 0c       	add	r5, r4
+ 13a:	45 19       	sub	r20, r5
+	uint8_t hz2 = hz >> 1;
+	hz2 &= ~0b11111110;
+	uint8_t hz1 = hz & ~0b11111110;
+	
+	// IC2 clocken
+	PORTA = 0x00;
+ 13c:	1b ba       	out	0x1b, r1	; 27
+	PORTA |= se8<<4 | se4<<7 | me8<<5 | he8<<6;
+ 13e:	5b b2       	in	r5, 0x1b	; 27
+ 140:	43 fb       	bst	r20, 3
+ 142:	88 24       	eor	r8, r8
+ 144:	80 f8       	bld	r8, 0
+ 146:	91 2c       	mov	r9, r1
+ 148:	00 24       	eor	r0, r0
+ 14a:	96 94       	lsr	r9
+ 14c:	87 94       	ror	r8
+ 14e:	07 94       	ror	r0
+ 150:	96 94       	lsr	r9
+ 152:	87 94       	ror	r8
+ 154:	07 94       	ror	r0
+ 156:	98 2c       	mov	r9, r8
+ 158:	80 2c       	mov	r8, r0
+ 15a:	85 28       	or	r8, r5
+ 15c:	63 fb       	bst	r22, 3
+ 15e:	aa 24       	eor	r10, r10
+ 160:	a0 f8       	bld	r10, 0
+ 162:	b1 2c       	mov	r11, r1
+ 164:	aa 0c       	add	r10, r10
+ 166:	bb 1c       	adc	r11, r11
+ 168:	aa 0c       	add	r10, r10
+ 16a:	bb 1c       	adc	r11, r11
+ 16c:	aa 0c       	add	r10, r10
+ 16e:	bb 1c       	adc	r11, r11
+ 170:	aa 0c       	add	r10, r10
+ 172:	bb 1c       	adc	r11, r11
+ 174:	aa 0c       	add	r10, r10
+ 176:	bb 1c       	adc	r11, r11
+ 178:	a8 28       	or	r10, r8
+ 17a:	83 fb       	bst	r24, 3
+ 17c:	cc 24       	eor	r12, r12
+ 17e:	c0 f8       	bld	r12, 0
+ 180:	d1 2c       	mov	r13, r1
+ 182:	cc 0c       	add	r12, r12
+ 184:	dd 1c       	adc	r13, r13
+ 186:	cc 0c       	add	r12, r12
+ 188:	dd 1c       	adc	r13, r13
+ 18a:	cc 0c       	add	r12, r12
+ 18c:	dd 1c       	adc	r13, r13
+ 18e:	cc 0c       	add	r12, r12
+ 190:	dd 1c       	adc	r13, r13
+ 192:	ca 28       	or	r12, r10
+ 194:	82 fb       	bst	r24, 2
+ 196:	ee 24       	eor	r14, r14
+ 198:	e0 f8       	bld	r14, 0
+ 19a:	f1 2c       	mov	r15, r1
+ 19c:	f6 94       	lsr	r15
+ 19e:	fe 2c       	mov	r15, r14
+ 1a0:	ee 24       	eor	r14, r14
+ 1a2:	f7 94       	ror	r15
+ 1a4:	e7 94       	ror	r14
+ 1a6:	ce 28       	or	r12, r14
+ 1a8:	cb ba       	out	0x1b, r12	; 27
+	PORTC ^= 1<<2;
+ 1aa:	e5 b2       	in	r14, 0x15	; 21
+ 1ac:	68 94       	set
+ 1ae:	ff 24       	eor	r15, r15
+ 1b0:	f2 f8       	bld	r15, 2
+ 1b2:	ef 24       	eor	r14, r15
+ 1b4:	e5 ba       	out	0x15, r14	; 21
+	PORTC ^= 1<<2;
+ 1b6:	e5 b2       	in	r14, 0x15	; 21
+ 1b8:	fe 24       	eor	r15, r14
+ 1ba:	f5 ba       	out	0x15, r15	; 21
+	PORTA = 0x00;
+ 1bc:	1b ba       	out	0x1b, r1	; 27
+	
+	
+	// IC3 clocken
+	PORTA = 0x00;
+ 1be:	1b ba       	out	0x1b, r1	; 27
+	PORTA |= se2<<4 | sz4 | sz2<<5 | me4<<1 | mz4<<2 | he4<<3 | me2<<6 | hz2<<7;
+ 1c0:	fb b2       	in	r15, 0x1b	; 27
+	se2 &= ~0b11111110;
+	uint8_t se1 = se & ~0b11111110;
+	
+	// LED status bestimmen Sekunden Zehner
+	uint8_t sz4 = sz >> 2;
+	sz4 &= ~0b11111110;
+ 1c2:	52 fb       	bst	r21, 2
+ 1c4:	ee 24       	eor	r14, r14
+ 1c6:	e0 f8       	bld	r14, 0
+	PORTA = 0x00;
+	
+	
+	// IC3 clocken
+	PORTA = 0x00;
+	PORTA |= se2<<4 | sz4 | sz2<<5 | me4<<1 | mz4<<2 | he4<<3 | me2<<6 | hz2<<7;
+ 1c8:	42 fb       	bst	r20, 2
+ 1ca:	00 27       	eor	r16, r16
+ 1cc:	00 f9       	bld	r16, 0
+ 1ce:	10 e0       	ldi	r17, 0x00	; 0
+ 1d0:	00 0f       	add	r16, r16
+ 1d2:	11 1f       	adc	r17, r17
+ 1d4:	00 0f       	add	r16, r16
+ 1d6:	11 1f       	adc	r17, r17
+ 1d8:	00 0f       	add	r16, r16
+ 1da:	11 1f       	adc	r17, r17
+ 1dc:	0e 29       	or	r16, r14
+ 1de:	f0 2a       	or	r15, r16
+ 1e0:	71 fb       	bst	r23, 1
+ 1e2:	22 27       	eor	r18, r18
+ 1e4:	20 f9       	bld	r18, 0
+ 1e6:	2d 87       	std	Y+13, r18	; 0x0d
+ 1e8:	1e 86       	std	Y+14, r1	; 0x0e
+ 1ea:	0d 85       	ldd	r16, Y+13	; 0x0d
+ 1ec:	1e 85       	ldd	r17, Y+14	; 0x0e
+ 1ee:	16 95       	lsr	r17
+ 1f0:	10 2f       	mov	r17, r16
+ 1f2:	00 27       	eor	r16, r16
+ 1f4:	17 95       	ror	r17
+ 1f6:	07 95       	ror	r16
+ 1f8:	0f 29       	or	r16, r15
+ 1fa:	62 fb       	bst	r22, 2
+ 1fc:	aa 27       	eor	r26, r26
+ 1fe:	a0 f9       	bld	r26, 0
+ 200:	b0 e0       	ldi	r27, 0x00	; 0
+ 202:	aa 0f       	add	r26, r26
+ 204:	bb 1f       	adc	r27, r27
+ 206:	0a 2b       	or	r16, r26
+ 208:	a9 2f       	mov	r26, r25
+ 20a:	a4 70       	andi	r26, 0x04	; 4
+ 20c:	a0 2b       	or	r26, r16
+ 20e:	61 fb       	bst	r22, 1
+ 210:	ee 27       	eor	r30, r30
+ 212:	e0 f9       	bld	r30, 0
+ 214:	f0 e0       	ldi	r31, 0x00	; 0
+ 216:	00 24       	eor	r0, r0
+ 218:	f6 95       	lsr	r31
+ 21a:	e7 95       	ror	r30
+ 21c:	07 94       	ror	r0
+ 21e:	f6 95       	lsr	r31
+ 220:	e7 95       	ror	r30
+ 222:	07 94       	ror	r0
+ 224:	fe 2f       	mov	r31, r30
+ 226:	e0 2d       	mov	r30, r0
+ 228:	ea 2b       	or	r30, r26
+ 22a:	81 fb       	bst	r24, 1
+ 22c:	22 27       	eor	r18, r18
+ 22e:	20 f9       	bld	r18, 0
+ 230:	30 e0       	ldi	r19, 0x00	; 0
+ 232:	22 95       	swap	r18
+ 234:	32 95       	swap	r19
+ 236:	30 7f       	andi	r19, 0xF0	; 240
+ 238:	32 27       	eor	r19, r18
+ 23a:	20 7f       	andi	r18, 0xF0	; 240
+ 23c:	32 27       	eor	r19, r18
+ 23e:	2e 2b       	or	r18, r30
+ 240:	51 fb       	bst	r21, 1
+ 242:	66 24       	eor	r6, r6
+ 244:	60 f8       	bld	r6, 0
+ 246:	71 2c       	mov	r7, r1
+ 248:	66 0c       	add	r6, r6
+ 24a:	77 1c       	adc	r7, r7
+ 24c:	66 0c       	add	r6, r6
+ 24e:	77 1c       	adc	r7, r7
+ 250:	66 0c       	add	r6, r6
+ 252:	77 1c       	adc	r7, r7
+ 254:	66 0c       	add	r6, r6
+ 256:	77 1c       	adc	r7, r7
+ 258:	66 0c       	add	r6, r6
+ 25a:	77 1c       	adc	r7, r7
+ 25c:	62 2a       	or	r6, r18
+ 25e:	6b ba       	out	0x1b, r6	; 27
+	PORTC ^= 1<<1;
+ 260:	35 b3       	in	r19, 0x15	; 21
+ 262:	22 e0       	ldi	r18, 0x02	; 2
+ 264:	32 27       	eor	r19, r18
+ 266:	35 bb       	out	0x15, r19	; 21
+	PORTC ^= 1<<1;
+ 268:	35 b3       	in	r19, 0x15	; 21
+ 26a:	23 27       	eor	r18, r19
+ 26c:	25 bb       	out	0x15, r18	; 21
+	PORTA = 0x00;
+ 26e:	1b ba       	out	0x1b, r1	; 27
+	
+	// IC4 clocken
+	PORTA = 0x00;
+ 270:	1b ba       	out	0x1b, r1	; 27
+	PORTA |= se1 | sz1<<1 | me1<<2 | mz1<<3 | he1<<4 | hz1<<5 | mz2<<6 | he2<<7;
+ 272:	3b b3       	in	r19, 0x1b	; 27
+	se8 &= ~0b11111110;
+	uint8_t se4 = se >> 2;
+	se4 &= ~0b11111110;
+	uint8_t se2 = se >> 1;
+	se2 &= ~0b11111110;
+	uint8_t se1 = se & ~0b11111110;
+ 274:	81 70       	andi	r24, 0x01	; 1
+	PORTC ^= 1<<1;
+	PORTA = 0x00;
+	
+	// IC4 clocken
+	PORTA = 0x00;
+	PORTA |= se1 | sz1<<1 | me1<<2 | mz1<<3 | he1<<4 | hz1<<5 | mz2<<6 | he2<<7;
+ 276:	40 fb       	bst	r20, 0
+ 278:	22 24       	eor	r2, r2
+ 27a:	20 f8       	bld	r2, 0
+ 27c:	31 2c       	mov	r3, r1
+ 27e:	22 0c       	add	r2, r2
+ 280:	33 1c       	adc	r3, r3
+ 282:	22 0c       	add	r2, r2
+ 284:	33 1c       	adc	r3, r3
+ 286:	22 0c       	add	r2, r2
+ 288:	33 1c       	adc	r3, r3
+ 28a:	22 0c       	add	r2, r2
+ 28c:	33 1c       	adc	r3, r3
+ 28e:	28 2a       	or	r2, r24
+ 290:	23 2a       	or	r2, r19
+ 292:	71 70       	andi	r23, 0x01	; 1
+ 294:	79 83       	std	Y+1, r23	; 0x01
+ 296:	1a 82       	std	Y+2, r1	; 0x02
+ 298:	a9 81       	ldd	r26, Y+1	; 0x01
+ 29a:	ba 81       	ldd	r27, Y+2	; 0x02
+ 29c:	aa 0f       	add	r26, r26
+ 29e:	bb 1f       	adc	r27, r27
+ 2a0:	a2 95       	swap	r26
+ 2a2:	b2 95       	swap	r27
+ 2a4:	b0 7f       	andi	r27, 0xF0	; 240
+ 2a6:	ba 27       	eor	r27, r26
+ 2a8:	a0 7f       	andi	r26, 0xF0	; 240
+ 2aa:	ba 27       	eor	r27, r26
+ 2ac:	a2 29       	or	r26, r2
+ 2ae:	61 70       	andi	r22, 0x01	; 1
+ 2b0:	6b 83       	std	Y+3, r22	; 0x03
+ 2b2:	1c 82       	std	Y+4, r1	; 0x04
+ 2b4:	2b 81       	ldd	r18, Y+3	; 0x03
+ 2b6:	3c 81       	ldd	r19, Y+4	; 0x04
+ 2b8:	22 0f       	add	r18, r18
+ 2ba:	33 1f       	adc	r19, r19
+ 2bc:	22 0f       	add	r18, r18
+ 2be:	33 1f       	adc	r19, r19
+ 2c0:	2a 2b       	or	r18, r26
+ 2c2:	69 2f       	mov	r22, r25
+ 2c4:	61 70       	andi	r22, 0x01	; 1
+ 2c6:	6d 83       	std	Y+5, r22	; 0x05
+ 2c8:	1e 82       	std	Y+6, r1	; 0x06
+ 2ca:	ed 81       	ldd	r30, Y+5	; 0x05
+ 2cc:	fe 81       	ldd	r31, Y+6	; 0x06
+ 2ce:	ee 0f       	add	r30, r30
+ 2d0:	ff 1f       	adc	r31, r31
+ 2d2:	ee 0f       	add	r30, r30
+ 2d4:	ff 1f       	adc	r31, r31
+ 2d6:	ee 0f       	add	r30, r30
+ 2d8:	ff 1f       	adc	r31, r31
+ 2da:	e2 2b       	or	r30, r18
+ 2dc:	46 95       	lsr	r20
+ 2de:	41 70       	andi	r20, 0x01	; 1
+ 2e0:	4f 83       	std	Y+7, r20	; 0x07
+ 2e2:	18 86       	std	Y+8, r1	; 0x08
+ 2e4:	6f 81       	ldd	r22, Y+7	; 0x07
+ 2e6:	78 85       	ldd	r23, Y+8	; 0x08
+ 2e8:	76 95       	lsr	r23
+ 2ea:	76 2f       	mov	r23, r22
+ 2ec:	66 27       	eor	r22, r22
+ 2ee:	77 95       	ror	r23
+ 2f0:	67 95       	ror	r22
+ 2f2:	6e 2b       	or	r22, r30
+ 2f4:	51 70       	andi	r21, 0x01	; 1
+ 2f6:	59 87       	std	Y+9, r21	; 0x09
+ 2f8:	1a 86       	std	Y+10, r1	; 0x0a
+ 2fa:	29 85       	ldd	r18, Y+9	; 0x09
+ 2fc:	3a 85       	ldd	r19, Y+10	; 0x0a
+ 2fe:	22 0f       	add	r18, r18
+ 300:	33 1f       	adc	r19, r19
+ 302:	26 2b       	or	r18, r22
+ 304:	96 95       	lsr	r25
+ 306:	91 70       	andi	r25, 0x01	; 1
+ 308:	9b 87       	std	Y+11, r25	; 0x0b
+ 30a:	1c 86       	std	Y+12, r1	; 0x0c
+ 30c:	8b 85       	ldd	r24, Y+11	; 0x0b
+ 30e:	9c 85       	ldd	r25, Y+12	; 0x0c
+ 310:	00 24       	eor	r0, r0
+ 312:	96 95       	lsr	r25
+ 314:	87 95       	ror	r24
+ 316:	07 94       	ror	r0
+ 318:	96 95       	lsr	r25
+ 31a:	87 95       	ror	r24
+ 31c:	07 94       	ror	r0
+ 31e:	98 2f       	mov	r25, r24
+ 320:	80 2d       	mov	r24, r0
+ 322:	82 2b       	or	r24, r18
+ 324:	8b bb       	out	0x1b, r24	; 27
+	PORTC ^= 1;
+ 326:	95 b3       	in	r25, 0x15	; 21
+ 328:	81 e0       	ldi	r24, 0x01	; 1
+ 32a:	98 27       	eor	r25, r24
+ 32c:	95 bb       	out	0x15, r25	; 21
+	PORTC ^= 1;
+ 32e:	95 b3       	in	r25, 0x15	; 21
+ 330:	89 27       	eor	r24, r25
+ 332:	85 bb       	out	0x15, r24	; 21
+	PORTA = 0x00;	
+ 334:	1b ba       	out	0x1b, r1	; 27
+	
+	statusReg &= ~(1<<updateBit);
+ 336:	80 91 6a 00 	lds	r24, 0x006A
+ 33a:	40 91 6b 00 	lds	r20, 0x006B
+ 33e:	21 e0       	ldi	r18, 0x01	; 1
+ 340:	30 e0       	ldi	r19, 0x00	; 0
+ 342:	d9 01       	movw	r26, r18
+ 344:	02 c0       	rjmp	.+4      	; 0x34a <encodeLed+0x292>
+ 346:	aa 0f       	add	r26, r26
+ 348:	bb 1f       	adc	r27, r27
+ 34a:	8a 95       	dec	r24
+ 34c:	e2 f7       	brpl	.-8      	; 0x346 <encodeLed+0x28e>
+ 34e:	cd 01       	movw	r24, r26
+ 350:	80 95       	com	r24
+ 352:	84 23       	and	r24, r20
+ 354:	80 93 6b 00 	sts	0x006B, r24
+}
+ 358:	2e 96       	adiw	r28, 0x0e	; 14
+ 35a:	0f b6       	in	r0, 0x3f	; 63
+ 35c:	f8 94       	cli
+ 35e:	de bf       	out	0x3e, r29	; 62
+ 360:	0f be       	out	0x3f, r0	; 63
+ 362:	cd bf       	out	0x3d, r28	; 61
+ 364:	df 91       	pop	r29
+ 366:	cf 91       	pop	r28
+ 368:	1f 91       	pop	r17
+ 36a:	0f 91       	pop	r16
+ 36c:	ff 90       	pop	r15
+ 36e:	ef 90       	pop	r14
+ 370:	df 90       	pop	r13
+ 372:	cf 90       	pop	r12
+ 374:	bf 90       	pop	r11
+ 376:	af 90       	pop	r10
+ 378:	9f 90       	pop	r9
+ 37a:	8f 90       	pop	r8
+ 37c:	7f 90       	pop	r7
+ 37e:	6f 90       	pop	r6
+ 380:	5f 90       	pop	r5
+ 382:	4f 90       	pop	r4
+ 384:	3f 90       	pop	r3
+ 386:	2f 90       	pop	r2
+ 388:	08 95       	ret
+
+0000038a <main>:
+
+int main(void)
+{
+	DDRA = 0xff;
+ 38a:	8f ef       	ldi	r24, 0xFF	; 255
+ 38c:	8a bb       	out	0x1a, r24	; 26
+	DDRB = 0b11100000;
+ 38e:	90 ee       	ldi	r25, 0xE0	; 224
+ 390:	97 bb       	out	0x17, r25	; 23
+	DDRC = 0xff;
+ 392:	84 bb       	out	0x14, r24	; 20
+	DDRD = 0b10111111;
+ 394:	9f eb       	ldi	r25, 0xBF	; 191
+ 396:	91 bb       	out	0x11, r25	; 17
+	
+	PORTA = 0xff;
+ 398:	8b bb       	out	0x1b, r24	; 27
+	PORTB = 0b00011111;
+ 39a:	8f e1       	ldi	r24, 0x1F	; 31
+ 39c:	88 bb       	out	0x18, r24	; 24
+	PORTC = 0x00;
+ 39e:	15 ba       	out	0x15, r1	; 21
+	PORTD = 0b11000000;
+ 3a0:	80 ec       	ldi	r24, 0xC0	; 192
+ 3a2:	82 bb       	out	0x12, r24	; 18
+	
+	// D-Latch Clocken (leeren/initialisieren)
+	PORTA = 0x00;
+ 3a4:	1b ba       	out	0x1b, r1	; 27
+	PORTC = 0b00000111;
+ 3a6:	87 e0       	ldi	r24, 0x07	; 7
+ 3a8:	85 bb       	out	0x15, r24	; 21
+	//_delay_ms(100);
 	PORTC = 0b00000000;
- 432:	15 ba       	out	0x15, r1	; 21
-	//PORTC ^= 1<<2;
-	//PORTC ^= 1<<2;
+ 3aa:	15 ba       	out	0x15, r1	; 21
 	//PORTC ^= 0b00000001;
 	//PORTC ^= 0b00000001;
 	
-	sei();
- 434:	78 94       	sei
+	
 	
 	TCCR1B |= 1<<CS12 | 1<<WGM12;
- 436:	8e b5       	in	r24, 0x2e	; 46
- 438:	8c 60       	ori	r24, 0x0C	; 12
- 43a:	8e bd       	out	0x2e, r24	; 46
+ 3ac:	8e b5       	in	r24, 0x2e	; 46
+ 3ae:	8c 60       	ori	r24, 0x0C	; 12
+ 3b0:	8e bd       	out	0x2e, r24	; 46
 	TIMSK |= 1<<OCIE1A;
- 43c:	89 b7       	in	r24, 0x39	; 57
- 43e:	80 61       	ori	r24, 0x10	; 16
- 440:	89 bf       	out	0x39, r24	; 57
+ 3b2:	89 b7       	in	r24, 0x39	; 57
+ 3b4:	80 61       	ori	r24, 0x10	; 16
+ 3b6:	89 bf       	out	0x39, r24	; 57
 	OCR1A = 31250-1;
- 442:	81 e1       	ldi	r24, 0x11	; 17
- 444:	9a e7       	ldi	r25, 0x7A	; 122
- 446:	9b bd       	out	0x2b, r25	; 43
- 448:	8a bd       	out	0x2a, r24	; 42
-				statusReg |= 1<<updateBit;
+ 3b8:	81 e1       	ldi	r24, 0x11	; 17
+ 3ba:	9a e7       	ldi	r25, 0x7A	; 122
+ 3bc:	9b bd       	out	0x2b, r25	; 43
+ 3be:	8a bd       	out	0x2a, r24	; 42
+	
+	sei();
+ 3c0:	78 94       	sei
+
 			}
 		}
 		else
 		{
 			statusReg &= ~(1<<button2Bit); // Button is not pressed
- 44a:	c1 e0       	ldi	r28, 0x01	; 1
- 44c:	d0 e0       	ldi	r29, 0x00	; 0
-				{
-					stunde--;
-				}
-				else
-				{
-					stunde = 23;
- 44e:	0f 2e       	mov	r0, r31
- 450:	f7 e1       	ldi	r31, 0x17	; 23
- 452:	ef 2e       	mov	r14, r31
- 454:	f1 2c       	mov	r15, r1
- 456:	f0 2d       	mov	r31, r0
-				{
-					minute--;
-				}
-				else
-				{
-					minute = 59;
- 458:	0b e3       	ldi	r16, 0x3B	; 59
- 45a:	10 e0       	ldi	r17, 0x00	; 0
+ 3c2:	c1 e0       	ldi	r28, 0x01	; 1
+ 3c4:	d0 e0       	ldi	r29, 0x00	; 0
 		// Toggle Alarm
 		if ( !( PIND & (1<<PIND6) ) )	// When pulled to LOW by pressing button
 		{
 			if (bit_is_clear(statusReg, button6Bit)) // When previously not pressed
 			{
 				PORTD ^= (1<<PIND5);
- 45c:	68 94       	set
- 45e:	dd 24       	eor	r13, r13
- 460:	d5 f8       	bld	r13, 5
+ 3c6:	68 94       	set
+ 3c8:	dd 24       	eor	r13, r13
+ 3ca:	d5 f8       	bld	r13, 5
+					{
+						weckStunde--;
+					}
+					else
+					{
+						weckStunde = 23;
+ 3cc:	0f 2e       	mov	r0, r31
+ 3ce:	f7 e1       	ldi	r31, 0x17	; 23
+ 3d0:	ef 2e       	mov	r14, r31
+ 3d2:	f1 2c       	mov	r15, r1
+ 3d4:	f0 2d       	mov	r31, r0
+					{
+						weckMinute--;
+					}
+					else
+					{
+						weckMinute = 59;
+ 3d6:	0b e3       	ldi	r16, 0x3B	; 59
+ 3d8:	10 e0       	ldi	r17, 0x00	; 0
         //_delay_ms(1000);
 		//toggleLED();
 		
 		
 		// ========= Setting Hour + =============
 		if ( !( PINB & (1<<PINB3) ) )	// When pulled to LOW by pressing button
- 462:	b3 99       	sbic	0x16, 3	; 22
- 464:	3d c0       	rjmp	.+122    	; 0x4e0 <main+0xe0>
+ 3da:	b3 99       	sbic	0x16, 3	; 22
+ 3dc:	77 c0       	rjmp	.+238    	; 0x4cc <main+0x142>
 		{
 			if (bit_is_clear(statusReg, button2Bit)) // When previously not pressed
- 466:	80 91 69 00 	lds	r24, 0x0069
- 46a:	20 91 65 00 	lds	r18, 0x0065
- 46e:	90 e0       	ldi	r25, 0x00	; 0
- 470:	02 c0       	rjmp	.+4      	; 0x476 <main+0x76>
- 472:	95 95       	asr	r25
- 474:	87 95       	ror	r24
- 476:	2a 95       	dec	r18
- 478:	e2 f7       	brpl	.-8      	; 0x472 <main+0x72>
- 47a:	80 fd       	sbrc	r24, 0
- 47c:	40 c0       	rjmp	.+128    	; 0x4fe <main+0xfe>
+ 3de:	80 91 6b 00 	lds	r24, 0x006B
+ 3e2:	20 91 65 00 	lds	r18, 0x0065
+ 3e6:	90 e0       	ldi	r25, 0x00	; 0
+ 3e8:	02 c0       	rjmp	.+4      	; 0x3ee <main+0x64>
+ 3ea:	95 95       	asr	r25
+ 3ec:	87 95       	ror	r24
+ 3ee:	2a 95       	dec	r18
+ 3f0:	e2 f7       	brpl	.-8      	; 0x3ea <main+0x60>
+ 3f2:	80 fd       	sbrc	r24, 0
+ 3f4:	7a c0       	rjmp	.+244    	; 0x4ea <main+0x160>
 			{
-				if (stunde < 23)
- 47e:	80 91 6a 00 	lds	r24, 0x006A
- 482:	90 91 6b 00 	lds	r25, 0x006B
- 486:	47 97       	sbiw	r24, 0x17	; 23
- 488:	50 f4       	brcc	.+20     	; 0x49e <main+0x9e>
-				{
-					stunde++;
- 48a:	80 91 6a 00 	lds	r24, 0x006A
- 48e:	90 91 6b 00 	lds	r25, 0x006B
- 492:	01 96       	adiw	r24, 0x01	; 1
- 494:	90 93 6b 00 	sts	0x006B, r25
- 498:	80 93 6a 00 	sts	0x006A, r24
- 49c:	04 c0       	rjmp	.+8      	; 0x4a6 <main+0xa6>
+				if (bit_is_clear(statusReg, modeBit)){
+ 3f6:	80 91 6b 00 	lds	r24, 0x006B
+ 3fa:	20 91 60 00 	lds	r18, 0x0060
+ 3fe:	90 e0       	ldi	r25, 0x00	; 0
+ 400:	02 c0       	rjmp	.+4      	; 0x406 <main+0x7c>
+ 402:	95 95       	asr	r25
+ 404:	87 95       	ror	r24
+ 406:	2a 95       	dec	r18
+ 408:	e2 f7       	brpl	.-8      	; 0x402 <main+0x78>
+ 40a:	80 fd       	sbrc	r24, 0
+ 40c:	31 c0       	rjmp	.+98     	; 0x470 <main+0xe6>
+					if (zeitStunde < 23)
+ 40e:	80 91 70 00 	lds	r24, 0x0070
+ 412:	90 91 71 00 	lds	r25, 0x0071
+ 416:	47 97       	sbiw	r24, 0x17	; 23
+ 418:	50 f4       	brcc	.+20     	; 0x42e <main+0xa4>
+					{
+						zeitStunde++;
+ 41a:	80 91 70 00 	lds	r24, 0x0070
+ 41e:	90 91 71 00 	lds	r25, 0x0071
+ 422:	01 96       	adiw	r24, 0x01	; 1
+ 424:	90 93 71 00 	sts	0x0071, r25
+ 428:	80 93 70 00 	sts	0x0070, r24
+ 42c:	04 c0       	rjmp	.+8      	; 0x436 <main+0xac>
+					}
+					else
+					{
+						zeitStunde = 0;
+ 42e:	10 92 71 00 	sts	0x0071, r1
+ 432:	10 92 70 00 	sts	0x0070, r1
+					}
+					statusReg |= 1<<button2Bit; // Button was pressed
+ 436:	80 91 65 00 	lds	r24, 0x0065
+ 43a:	20 91 6b 00 	lds	r18, 0x006B
+ 43e:	ae 01       	movw	r20, r28
+ 440:	02 c0       	rjmp	.+4      	; 0x446 <main+0xbc>
+ 442:	44 0f       	add	r20, r20
+ 444:	55 1f       	adc	r21, r21
+ 446:	8a 95       	dec	r24
+ 448:	e2 f7       	brpl	.-8      	; 0x442 <main+0xb8>
+ 44a:	ca 01       	movw	r24, r20
+ 44c:	82 2b       	or	r24, r18
+ 44e:	80 93 6b 00 	sts	0x006B, r24
+					encodeLed(zeitSekunde, zeitMinute, zeitStunde);
+ 452:	40 91 70 00 	lds	r20, 0x0070
+ 456:	50 91 71 00 	lds	r21, 0x0071
+ 45a:	60 91 72 00 	lds	r22, 0x0072
+ 45e:	70 91 73 00 	lds	r23, 0x0073
+ 462:	80 91 74 00 	lds	r24, 0x0074
+ 466:	90 91 75 00 	lds	r25, 0x0075
+ 46a:	0e 94 5c 00 	call	0xb8	; 0xb8 <encodeLed>
+ 46e:	3d c0       	rjmp	.+122    	; 0x4ea <main+0x160>
 				}
 				else
 				{
-					stunde = 0;
- 49e:	10 92 6b 00 	sts	0x006B, r1
- 4a2:	10 92 6a 00 	sts	0x006A, r1
-				}
-				statusReg |= 1<<button2Bit; // Button was pressed
- 4a6:	80 91 65 00 	lds	r24, 0x0065
- 4aa:	20 91 69 00 	lds	r18, 0x0069
- 4ae:	ae 01       	movw	r20, r28
- 4b0:	02 c0       	rjmp	.+4      	; 0x4b6 <main+0xb6>
- 4b2:	44 0f       	add	r20, r20
- 4b4:	55 1f       	adc	r21, r21
- 4b6:	8a 95       	dec	r24
- 4b8:	e2 f7       	brpl	.-8      	; 0x4b2 <main+0xb2>
- 4ba:	ca 01       	movw	r24, r20
- 4bc:	82 2b       	or	r24, r18
- 4be:	80 93 69 00 	sts	0x0069, r24
-				statusReg |= 1<<updateBit;
- 4c2:	80 91 68 00 	lds	r24, 0x0068
- 4c6:	20 91 69 00 	lds	r18, 0x0069
- 4ca:	ae 01       	movw	r20, r28
- 4cc:	02 c0       	rjmp	.+4      	; 0x4d2 <main+0xd2>
- 4ce:	44 0f       	add	r20, r20
- 4d0:	55 1f       	adc	r21, r21
- 4d2:	8a 95       	dec	r24
- 4d4:	e2 f7       	brpl	.-8      	; 0x4ce <main+0xce>
- 4d6:	ca 01       	movw	r24, r20
- 4d8:	82 2b       	or	r24, r18
- 4da:	80 93 69 00 	sts	0x0069, r24
- 4de:	0f c0       	rjmp	.+30     	; 0x4fe <main+0xfe>
+					if (weckStunde < 23)
+ 470:	80 91 6c 00 	lds	r24, 0x006C
+ 474:	90 91 6d 00 	lds	r25, 0x006D
+ 478:	47 97       	sbiw	r24, 0x17	; 23
+ 47a:	50 f4       	brcc	.+20     	; 0x490 <main+0x106>
+					{
+						weckStunde++;
+ 47c:	80 91 6c 00 	lds	r24, 0x006C
+ 480:	90 91 6d 00 	lds	r25, 0x006D
+ 484:	01 96       	adiw	r24, 0x01	; 1
+ 486:	90 93 6d 00 	sts	0x006D, r25
+ 48a:	80 93 6c 00 	sts	0x006C, r24
+ 48e:	04 c0       	rjmp	.+8      	; 0x498 <main+0x10e>
+					}
+					else
+					{
+						weckStunde = 0;
+ 490:	10 92 6d 00 	sts	0x006D, r1
+ 494:	10 92 6c 00 	sts	0x006C, r1
+					}
+					statusReg |= 1<<button2Bit; // Button was pressed
+ 498:	80 91 65 00 	lds	r24, 0x0065
+ 49c:	20 91 6b 00 	lds	r18, 0x006B
+ 4a0:	ae 01       	movw	r20, r28
+ 4a2:	02 c0       	rjmp	.+4      	; 0x4a8 <main+0x11e>
+ 4a4:	44 0f       	add	r20, r20
+ 4a6:	55 1f       	adc	r21, r21
+ 4a8:	8a 95       	dec	r24
+ 4aa:	e2 f7       	brpl	.-8      	; 0x4a4 <main+0x11a>
+ 4ac:	ca 01       	movw	r24, r20
+ 4ae:	82 2b       	or	r24, r18
+ 4b0:	80 93 6b 00 	sts	0x006B, r24
+					encodeLed(0, weckMinute, weckStunde);
+ 4b4:	40 91 6c 00 	lds	r20, 0x006C
+ 4b8:	50 91 6d 00 	lds	r21, 0x006D
+ 4bc:	60 91 6e 00 	lds	r22, 0x006E
+ 4c0:	70 91 6f 00 	lds	r23, 0x006F
+ 4c4:	80 e0       	ldi	r24, 0x00	; 0
+ 4c6:	0e 94 5c 00 	call	0xb8	; 0xb8 <encodeLed>
+ 4ca:	0f c0       	rjmp	.+30     	; 0x4ea <main+0x160>
+
 			}
 		}
 		else
 		{
 			statusReg &= ~(1<<button2Bit); // Button is not pressed
- 4e0:	80 91 65 00 	lds	r24, 0x0065
- 4e4:	20 91 69 00 	lds	r18, 0x0069
- 4e8:	ae 01       	movw	r20, r28
- 4ea:	02 c0       	rjmp	.+4      	; 0x4f0 <main+0xf0>
- 4ec:	44 0f       	add	r20, r20
- 4ee:	55 1f       	adc	r21, r21
- 4f0:	8a 95       	dec	r24
- 4f2:	e2 f7       	brpl	.-8      	; 0x4ec <main+0xec>
- 4f4:	ca 01       	movw	r24, r20
- 4f6:	80 95       	com	r24
- 4f8:	82 23       	and	r24, r18
- 4fa:	80 93 69 00 	sts	0x0069, r24
+ 4cc:	80 91 65 00 	lds	r24, 0x0065
+ 4d0:	20 91 6b 00 	lds	r18, 0x006B
+ 4d4:	ae 01       	movw	r20, r28
+ 4d6:	02 c0       	rjmp	.+4      	; 0x4dc <main+0x152>
+ 4d8:	44 0f       	add	r20, r20
+ 4da:	55 1f       	adc	r21, r21
+ 4dc:	8a 95       	dec	r24
+ 4de:	e2 f7       	brpl	.-8      	; 0x4d8 <main+0x14e>
+ 4e0:	ca 01       	movw	r24, r20
+ 4e2:	80 95       	com	r24
+ 4e4:	82 23       	and	r24, r18
+ 4e6:	80 93 6b 00 	sts	0x006B, r24
 		}
 		// ==================================
 		
 		// ========= Setting Hour - =============
 		if ( !( PINB & (1<<PINB4) ) )	// When pulled to LOW by pressing button
- 4fe:	b4 99       	sbic	0x16, 4	; 22
- 500:	3d c0       	rjmp	.+122    	; 0x57c <main+0x17c>
+ 4ea:	b4 99       	sbic	0x16, 4	; 22
+ 4ec:	77 c0       	rjmp	.+238    	; 0x5dc <main+0x252>
 		{
 			if (bit_is_clear(statusReg, button1Bit)) // When previously not pressed
- 502:	80 91 69 00 	lds	r24, 0x0069
- 506:	20 91 66 00 	lds	r18, 0x0066
- 50a:	90 e0       	ldi	r25, 0x00	; 0
- 50c:	02 c0       	rjmp	.+4      	; 0x512 <main+0x112>
- 50e:	95 95       	asr	r25
- 510:	87 95       	ror	r24
- 512:	2a 95       	dec	r18
- 514:	e2 f7       	brpl	.-8      	; 0x50e <main+0x10e>
- 516:	80 fd       	sbrc	r24, 0
- 518:	40 c0       	rjmp	.+128    	; 0x59a <main+0x19a>
+ 4ee:	80 91 6b 00 	lds	r24, 0x006B
+ 4f2:	20 91 66 00 	lds	r18, 0x0066
+ 4f6:	90 e0       	ldi	r25, 0x00	; 0
+ 4f8:	02 c0       	rjmp	.+4      	; 0x4fe <main+0x174>
+ 4fa:	95 95       	asr	r25
+ 4fc:	87 95       	ror	r24
+ 4fe:	2a 95       	dec	r18
+ 500:	e2 f7       	brpl	.-8      	; 0x4fa <main+0x170>
+ 502:	80 fd       	sbrc	r24, 0
+ 504:	7a c0       	rjmp	.+244    	; 0x5fa <main+0x270>
 			{
-				if (stunde > 1)
- 51a:	80 91 6a 00 	lds	r24, 0x006A
- 51e:	90 91 6b 00 	lds	r25, 0x006B
- 522:	02 97       	sbiw	r24, 0x02	; 2
- 524:	50 f0       	brcs	.+20     	; 0x53a <main+0x13a>
-				{
-					stunde--;
- 526:	80 91 6a 00 	lds	r24, 0x006A
- 52a:	90 91 6b 00 	lds	r25, 0x006B
- 52e:	01 97       	sbiw	r24, 0x01	; 1
- 530:	90 93 6b 00 	sts	0x006B, r25
- 534:	80 93 6a 00 	sts	0x006A, r24
- 538:	04 c0       	rjmp	.+8      	; 0x542 <main+0x142>
+				if (bit_is_clear(statusReg, modeBit)){
+ 506:	80 91 6b 00 	lds	r24, 0x006B
+ 50a:	20 91 60 00 	lds	r18, 0x0060
+ 50e:	90 e0       	ldi	r25, 0x00	; 0
+ 510:	02 c0       	rjmp	.+4      	; 0x516 <main+0x18c>
+ 512:	95 95       	asr	r25
+ 514:	87 95       	ror	r24
+ 516:	2a 95       	dec	r18
+ 518:	e2 f7       	brpl	.-8      	; 0x512 <main+0x188>
+ 51a:	80 fd       	sbrc	r24, 0
+ 51c:	31 c0       	rjmp	.+98     	; 0x580 <main+0x1f6>
+					if (zeitStunde > 1)
+ 51e:	80 91 70 00 	lds	r24, 0x0070
+ 522:	90 91 71 00 	lds	r25, 0x0071
+ 526:	02 97       	sbiw	r24, 0x02	; 2
+ 528:	50 f0       	brcs	.+20     	; 0x53e <main+0x1b4>
+					{
+						zeitStunde--;
+ 52a:	80 91 70 00 	lds	r24, 0x0070
+ 52e:	90 91 71 00 	lds	r25, 0x0071
+ 532:	01 97       	sbiw	r24, 0x01	; 1
+ 534:	90 93 71 00 	sts	0x0071, r25
+ 538:	80 93 70 00 	sts	0x0070, r24
+ 53c:	04 c0       	rjmp	.+8      	; 0x546 <main+0x1bc>
+					}
+					else
+					{
+						zeitStunde = 23;
+ 53e:	f0 92 71 00 	sts	0x0071, r15
+ 542:	e0 92 70 00 	sts	0x0070, r14
+					}
+					statusReg |= 1<<button1Bit; // Button was pressed
+ 546:	80 91 66 00 	lds	r24, 0x0066
+ 54a:	20 91 6b 00 	lds	r18, 0x006B
+ 54e:	ae 01       	movw	r20, r28
+ 550:	02 c0       	rjmp	.+4      	; 0x556 <main+0x1cc>
+ 552:	44 0f       	add	r20, r20
+ 554:	55 1f       	adc	r21, r21
+ 556:	8a 95       	dec	r24
+ 558:	e2 f7       	brpl	.-8      	; 0x552 <main+0x1c8>
+ 55a:	ca 01       	movw	r24, r20
+ 55c:	82 2b       	or	r24, r18
+ 55e:	80 93 6b 00 	sts	0x006B, r24
+					encodeLed(zeitSekunde, zeitMinute, zeitStunde);
+ 562:	40 91 70 00 	lds	r20, 0x0070
+ 566:	50 91 71 00 	lds	r21, 0x0071
+ 56a:	60 91 72 00 	lds	r22, 0x0072
+ 56e:	70 91 73 00 	lds	r23, 0x0073
+ 572:	80 91 74 00 	lds	r24, 0x0074
+ 576:	90 91 75 00 	lds	r25, 0x0075
+ 57a:	0e 94 5c 00 	call	0xb8	; 0xb8 <encodeLed>
+ 57e:	3d c0       	rjmp	.+122    	; 0x5fa <main+0x270>
 				}
 				else
 				{
-					stunde = 23;
- 53a:	f0 92 6b 00 	sts	0x006B, r15
- 53e:	e0 92 6a 00 	sts	0x006A, r14
+					if (weckStunde > 1)
+ 580:	80 91 6c 00 	lds	r24, 0x006C
+ 584:	90 91 6d 00 	lds	r25, 0x006D
+ 588:	02 97       	sbiw	r24, 0x02	; 2
+ 58a:	50 f0       	brcs	.+20     	; 0x5a0 <main+0x216>
+					{
+						weckStunde--;
+ 58c:	80 91 6c 00 	lds	r24, 0x006C
+ 590:	90 91 6d 00 	lds	r25, 0x006D
+ 594:	01 97       	sbiw	r24, 0x01	; 1
+ 596:	90 93 6d 00 	sts	0x006D, r25
+ 59a:	80 93 6c 00 	sts	0x006C, r24
+ 59e:	04 c0       	rjmp	.+8      	; 0x5a8 <main+0x21e>
+					}
+					else
+					{
+						weckStunde = 23;
+ 5a0:	f0 92 6d 00 	sts	0x006D, r15
+ 5a4:	e0 92 6c 00 	sts	0x006C, r14
+					}
+					statusReg |= 1<<button1Bit; // Button was pressed
+ 5a8:	80 91 66 00 	lds	r24, 0x0066
+ 5ac:	20 91 6b 00 	lds	r18, 0x006B
+ 5b0:	ae 01       	movw	r20, r28
+ 5b2:	02 c0       	rjmp	.+4      	; 0x5b8 <main+0x22e>
+ 5b4:	44 0f       	add	r20, r20
+ 5b6:	55 1f       	adc	r21, r21
+ 5b8:	8a 95       	dec	r24
+ 5ba:	e2 f7       	brpl	.-8      	; 0x5b4 <main+0x22a>
+ 5bc:	ca 01       	movw	r24, r20
+ 5be:	82 2b       	or	r24, r18
+ 5c0:	80 93 6b 00 	sts	0x006B, r24
+					encodeLed(0, weckMinute, weckStunde);
+ 5c4:	40 91 6c 00 	lds	r20, 0x006C
+ 5c8:	50 91 6d 00 	lds	r21, 0x006D
+ 5cc:	60 91 6e 00 	lds	r22, 0x006E
+ 5d0:	70 91 6f 00 	lds	r23, 0x006F
+ 5d4:	80 e0       	ldi	r24, 0x00	; 0
+ 5d6:	0e 94 5c 00 	call	0xb8	; 0xb8 <encodeLed>
+ 5da:	0f c0       	rjmp	.+30     	; 0x5fa <main+0x270>
 				}
-				statusReg |= 1<<button1Bit; // Button was pressed
- 542:	80 91 66 00 	lds	r24, 0x0066
- 546:	20 91 69 00 	lds	r18, 0x0069
- 54a:	ae 01       	movw	r20, r28
- 54c:	02 c0       	rjmp	.+4      	; 0x552 <main+0x152>
- 54e:	44 0f       	add	r20, r20
- 550:	55 1f       	adc	r21, r21
- 552:	8a 95       	dec	r24
- 554:	e2 f7       	brpl	.-8      	; 0x54e <main+0x14e>
- 556:	ca 01       	movw	r24, r20
- 558:	82 2b       	or	r24, r18
- 55a:	80 93 69 00 	sts	0x0069, r24
-				statusReg |= 1<<updateBit;
- 55e:	80 91 68 00 	lds	r24, 0x0068
- 562:	20 91 69 00 	lds	r18, 0x0069
- 566:	ae 01       	movw	r20, r28
- 568:	02 c0       	rjmp	.+4      	; 0x56e <main+0x16e>
- 56a:	44 0f       	add	r20, r20
- 56c:	55 1f       	adc	r21, r21
- 56e:	8a 95       	dec	r24
- 570:	e2 f7       	brpl	.-8      	; 0x56a <main+0x16a>
- 572:	ca 01       	movw	r24, r20
- 574:	82 2b       	or	r24, r18
- 576:	80 93 69 00 	sts	0x0069, r24
- 57a:	0f c0       	rjmp	.+30     	; 0x59a <main+0x19a>
 			}
 		}
 		else
 		{
 			statusReg &= ~(1<<button1Bit); // Button is not pressed
- 57c:	80 91 66 00 	lds	r24, 0x0066
- 580:	20 91 69 00 	lds	r18, 0x0069
- 584:	ae 01       	movw	r20, r28
- 586:	02 c0       	rjmp	.+4      	; 0x58c <main+0x18c>
- 588:	44 0f       	add	r20, r20
- 58a:	55 1f       	adc	r21, r21
- 58c:	8a 95       	dec	r24
- 58e:	e2 f7       	brpl	.-8      	; 0x588 <main+0x188>
- 590:	ca 01       	movw	r24, r20
- 592:	80 95       	com	r24
- 594:	82 23       	and	r24, r18
- 596:	80 93 69 00 	sts	0x0069, r24
+ 5dc:	80 91 66 00 	lds	r24, 0x0066
+ 5e0:	20 91 6b 00 	lds	r18, 0x006B
+ 5e4:	ae 01       	movw	r20, r28
+ 5e6:	02 c0       	rjmp	.+4      	; 0x5ec <main+0x262>
+ 5e8:	44 0f       	add	r20, r20
+ 5ea:	55 1f       	adc	r21, r21
+ 5ec:	8a 95       	dec	r24
+ 5ee:	e2 f7       	brpl	.-8      	; 0x5e8 <main+0x25e>
+ 5f0:	ca 01       	movw	r24, r20
+ 5f2:	80 95       	com	r24
+ 5f4:	82 23       	and	r24, r18
+ 5f6:	80 93 6b 00 	sts	0x006B, r24
 		}
 		// ==================================
 
 		// ========= Setting Minuten + =============
 		if ( !( PINB & (1<<PINB1) ) )	// When pulled to LOW by pressing button
- 59a:	b1 99       	sbic	0x16, 1	; 22
- 59c:	43 c0       	rjmp	.+134    	; 0x624 <main+0x224>
+ 5fa:	b1 99       	sbic	0x16, 1	; 22
+ 5fc:	7d c0       	rjmp	.+250    	; 0x6f8 <main+0x36e>
 		{
 			if (bit_is_clear(statusReg, button4Bit)) // When previously not pressed
- 59e:	80 91 69 00 	lds	r24, 0x0069
- 5a2:	20 91 63 00 	lds	r18, 0x0063
- 5a6:	90 e0       	ldi	r25, 0x00	; 0
- 5a8:	02 c0       	rjmp	.+4      	; 0x5ae <main+0x1ae>
- 5aa:	95 95       	asr	r25
- 5ac:	87 95       	ror	r24
- 5ae:	2a 95       	dec	r18
- 5b0:	e2 f7       	brpl	.-8      	; 0x5aa <main+0x1aa>
- 5b2:	80 fd       	sbrc	r24, 0
- 5b4:	46 c0       	rjmp	.+140    	; 0x642 <main+0x242>
+ 5fe:	80 91 6b 00 	lds	r24, 0x006B
+ 602:	20 91 63 00 	lds	r18, 0x0063
+ 606:	90 e0       	ldi	r25, 0x00	; 0
+ 608:	02 c0       	rjmp	.+4      	; 0x60e <main+0x284>
+ 60a:	95 95       	asr	r25
+ 60c:	87 95       	ror	r24
+ 60e:	2a 95       	dec	r18
+ 610:	e2 f7       	brpl	.-8      	; 0x60a <main+0x280>
+ 612:	80 fd       	sbrc	r24, 0
+ 614:	80 c0       	rjmp	.+256    	; 0x716 <main+0x38c>
 			{
-				if (minute < 59)
- 5b6:	80 91 6c 00 	lds	r24, 0x006C
- 5ba:	90 91 6d 00 	lds	r25, 0x006D
- 5be:	cb 97       	sbiw	r24, 0x3b	; 59
- 5c0:	50 f4       	brcc	.+20     	; 0x5d6 <main+0x1d6>
-				{
-					minute++;
- 5c2:	80 91 6c 00 	lds	r24, 0x006C
- 5c6:	90 91 6d 00 	lds	r25, 0x006D
- 5ca:	01 96       	adiw	r24, 0x01	; 1
- 5cc:	90 93 6d 00 	sts	0x006D, r25
- 5d0:	80 93 6c 00 	sts	0x006C, r24
- 5d4:	04 c0       	rjmp	.+8      	; 0x5de <main+0x1de>
+				if (bit_is_clear(statusReg, modeBit)){
+ 616:	80 91 6b 00 	lds	r24, 0x006B
+ 61a:	20 91 60 00 	lds	r18, 0x0060
+ 61e:	90 e0       	ldi	r25, 0x00	; 0
+ 620:	02 c0       	rjmp	.+4      	; 0x626 <main+0x29c>
+ 622:	95 95       	asr	r25
+ 624:	87 95       	ror	r24
+ 626:	2a 95       	dec	r18
+ 628:	e2 f7       	brpl	.-8      	; 0x622 <main+0x298>
+ 62a:	80 fd       	sbrc	r24, 0
+ 62c:	37 c0       	rjmp	.+110    	; 0x69c <main+0x312>
+					if (zeitMinute < 59)
+ 62e:	80 91 72 00 	lds	r24, 0x0072
+ 632:	90 91 73 00 	lds	r25, 0x0073
+ 636:	cb 97       	sbiw	r24, 0x3b	; 59
+ 638:	50 f4       	brcc	.+20     	; 0x64e <main+0x2c4>
+					{
+						zeitMinute++;
+ 63a:	80 91 72 00 	lds	r24, 0x0072
+ 63e:	90 91 73 00 	lds	r25, 0x0073
+ 642:	01 96       	adiw	r24, 0x01	; 1
+ 644:	90 93 73 00 	sts	0x0073, r25
+ 648:	80 93 72 00 	sts	0x0072, r24
+ 64c:	04 c0       	rjmp	.+8      	; 0x656 <main+0x2cc>
+					}
+					else
+					{
+						zeitMinute = 0;
+ 64e:	10 92 73 00 	sts	0x0073, r1
+ 652:	10 92 72 00 	sts	0x0072, r1
+					}
+					zeitSekunde = 0;
+ 656:	10 92 75 00 	sts	0x0075, r1
+ 65a:	10 92 74 00 	sts	0x0074, r1
+					TCNT1H = 0x00;
+ 65e:	1d bc       	out	0x2d, r1	; 45
+					TCNT1L = 0x00;
+ 660:	1c bc       	out	0x2c, r1	; 44
+					statusReg |= 1<<button4Bit; // Button was pressed
+ 662:	80 91 63 00 	lds	r24, 0x0063
+ 666:	20 91 6b 00 	lds	r18, 0x006B
+ 66a:	ae 01       	movw	r20, r28
+ 66c:	02 c0       	rjmp	.+4      	; 0x672 <main+0x2e8>
+ 66e:	44 0f       	add	r20, r20
+ 670:	55 1f       	adc	r21, r21
+ 672:	8a 95       	dec	r24
+ 674:	e2 f7       	brpl	.-8      	; 0x66e <main+0x2e4>
+ 676:	ca 01       	movw	r24, r20
+ 678:	82 2b       	or	r24, r18
+ 67a:	80 93 6b 00 	sts	0x006B, r24
+					encodeLed(zeitSekunde, zeitMinute, zeitStunde);
+ 67e:	40 91 70 00 	lds	r20, 0x0070
+ 682:	50 91 71 00 	lds	r21, 0x0071
+ 686:	60 91 72 00 	lds	r22, 0x0072
+ 68a:	70 91 73 00 	lds	r23, 0x0073
+ 68e:	80 91 74 00 	lds	r24, 0x0074
+ 692:	90 91 75 00 	lds	r25, 0x0075
+ 696:	0e 94 5c 00 	call	0xb8	; 0xb8 <encodeLed>
+ 69a:	3d c0       	rjmp	.+122    	; 0x716 <main+0x38c>
 				}
 				else
 				{
-					minute = 0;
- 5d6:	10 92 6d 00 	sts	0x006D, r1
- 5da:	10 92 6c 00 	sts	0x006C, r1
+					if (weckMinute < 59)
+ 69c:	80 91 6e 00 	lds	r24, 0x006E
+ 6a0:	90 91 6f 00 	lds	r25, 0x006F
+ 6a4:	cb 97       	sbiw	r24, 0x3b	; 59
+ 6a6:	50 f4       	brcc	.+20     	; 0x6bc <main+0x332>
+					{
+						weckMinute++;
+ 6a8:	80 91 6e 00 	lds	r24, 0x006E
+ 6ac:	90 91 6f 00 	lds	r25, 0x006F
+ 6b0:	01 96       	adiw	r24, 0x01	; 1
+ 6b2:	90 93 6f 00 	sts	0x006F, r25
+ 6b6:	80 93 6e 00 	sts	0x006E, r24
+ 6ba:	04 c0       	rjmp	.+8      	; 0x6c4 <main+0x33a>
+					}
+					else
+					{
+						weckMinute = 0;
+ 6bc:	10 92 6f 00 	sts	0x006F, r1
+ 6c0:	10 92 6e 00 	sts	0x006E, r1
+					}
+					statusReg |= 1<<button4Bit; // Button was pressed
+ 6c4:	80 91 63 00 	lds	r24, 0x0063
+ 6c8:	20 91 6b 00 	lds	r18, 0x006B
+ 6cc:	ae 01       	movw	r20, r28
+ 6ce:	02 c0       	rjmp	.+4      	; 0x6d4 <main+0x34a>
+ 6d0:	44 0f       	add	r20, r20
+ 6d2:	55 1f       	adc	r21, r21
+ 6d4:	8a 95       	dec	r24
+ 6d6:	e2 f7       	brpl	.-8      	; 0x6d0 <main+0x346>
+ 6d8:	ca 01       	movw	r24, r20
+ 6da:	82 2b       	or	r24, r18
+ 6dc:	80 93 6b 00 	sts	0x006B, r24
+					encodeLed(0, weckMinute, weckStunde);
+ 6e0:	40 91 6c 00 	lds	r20, 0x006C
+ 6e4:	50 91 6d 00 	lds	r21, 0x006D
+ 6e8:	60 91 6e 00 	lds	r22, 0x006E
+ 6ec:	70 91 6f 00 	lds	r23, 0x006F
+ 6f0:	80 e0       	ldi	r24, 0x00	; 0
+ 6f2:	0e 94 5c 00 	call	0xb8	; 0xb8 <encodeLed>
+ 6f6:	0f c0       	rjmp	.+30     	; 0x716 <main+0x38c>
 				}
-				sekunde = 0;
- 5de:	10 92 6f 00 	sts	0x006F, r1
- 5e2:	10 92 6e 00 	sts	0x006E, r1
-				TCNT1H = 0x00;
- 5e6:	1d bc       	out	0x2d, r1	; 45
-				TCNT1L = 0x00;
- 5e8:	1c bc       	out	0x2c, r1	; 44
-				statusReg |= 1<<button4Bit; // Button was pressed
- 5ea:	80 91 63 00 	lds	r24, 0x0063
- 5ee:	20 91 69 00 	lds	r18, 0x0069
- 5f2:	ae 01       	movw	r20, r28
- 5f4:	02 c0       	rjmp	.+4      	; 0x5fa <main+0x1fa>
- 5f6:	44 0f       	add	r20, r20
- 5f8:	55 1f       	adc	r21, r21
- 5fa:	8a 95       	dec	r24
- 5fc:	e2 f7       	brpl	.-8      	; 0x5f6 <main+0x1f6>
- 5fe:	ca 01       	movw	r24, r20
- 600:	82 2b       	or	r24, r18
- 602:	80 93 69 00 	sts	0x0069, r24
-				statusReg |= 1<<updateBit;
- 606:	80 91 68 00 	lds	r24, 0x0068
- 60a:	20 91 69 00 	lds	r18, 0x0069
- 60e:	ae 01       	movw	r20, r28
- 610:	02 c0       	rjmp	.+4      	; 0x616 <main+0x216>
- 612:	44 0f       	add	r20, r20
- 614:	55 1f       	adc	r21, r21
- 616:	8a 95       	dec	r24
- 618:	e2 f7       	brpl	.-8      	; 0x612 <main+0x212>
- 61a:	ca 01       	movw	r24, r20
- 61c:	82 2b       	or	r24, r18
- 61e:	80 93 69 00 	sts	0x0069, r24
- 622:	0f c0       	rjmp	.+30     	; 0x642 <main+0x242>
 			}
 		}
 		else
 		{
 			statusReg &= ~(1<<button4Bit); // Button is not pressed
- 624:	80 91 63 00 	lds	r24, 0x0063
- 628:	20 91 69 00 	lds	r18, 0x0069
- 62c:	ae 01       	movw	r20, r28
- 62e:	02 c0       	rjmp	.+4      	; 0x634 <main+0x234>
- 630:	44 0f       	add	r20, r20
- 632:	55 1f       	adc	r21, r21
- 634:	8a 95       	dec	r24
- 636:	e2 f7       	brpl	.-8      	; 0x630 <main+0x230>
- 638:	ca 01       	movw	r24, r20
- 63a:	80 95       	com	r24
- 63c:	82 23       	and	r24, r18
- 63e:	80 93 69 00 	sts	0x0069, r24
+ 6f8:	80 91 63 00 	lds	r24, 0x0063
+ 6fc:	20 91 6b 00 	lds	r18, 0x006B
+ 700:	ae 01       	movw	r20, r28
+ 702:	02 c0       	rjmp	.+4      	; 0x708 <main+0x37e>
+ 704:	44 0f       	add	r20, r20
+ 706:	55 1f       	adc	r21, r21
+ 708:	8a 95       	dec	r24
+ 70a:	e2 f7       	brpl	.-8      	; 0x704 <main+0x37a>
+ 70c:	ca 01       	movw	r24, r20
+ 70e:	80 95       	com	r24
+ 710:	82 23       	and	r24, r18
+ 712:	80 93 6b 00 	sts	0x006B, r24
 		}
 		// ==================================
 
 
 		// ========= Setting Minuten - =============
 		if ( !( PINB & (1<<PINB2) ) )	// When pulled to LOW by pressing button
- 642:	b2 99       	sbic	0x16, 2	; 22
- 644:	43 c0       	rjmp	.+134    	; 0x6cc <main+0x2cc>
+ 716:	b2 99       	sbic	0x16, 2	; 22
+ 718:	7d c0       	rjmp	.+250    	; 0x814 <main+0x48a>
 		{
 			if (bit_is_clear(statusReg, button3Bit)) // When previously not pressed
- 646:	80 91 69 00 	lds	r24, 0x0069
- 64a:	20 91 64 00 	lds	r18, 0x0064
- 64e:	90 e0       	ldi	r25, 0x00	; 0
- 650:	02 c0       	rjmp	.+4      	; 0x656 <main+0x256>
- 652:	95 95       	asr	r25
- 654:	87 95       	ror	r24
- 656:	2a 95       	dec	r18
- 658:	e2 f7       	brpl	.-8      	; 0x652 <main+0x252>
- 65a:	80 fd       	sbrc	r24, 0
- 65c:	46 c0       	rjmp	.+140    	; 0x6ea <main+0x2ea>
+ 71a:	80 91 6b 00 	lds	r24, 0x006B
+ 71e:	20 91 64 00 	lds	r18, 0x0064
+ 722:	90 e0       	ldi	r25, 0x00	; 0
+ 724:	02 c0       	rjmp	.+4      	; 0x72a <main+0x3a0>
+ 726:	95 95       	asr	r25
+ 728:	87 95       	ror	r24
+ 72a:	2a 95       	dec	r18
+ 72c:	e2 f7       	brpl	.-8      	; 0x726 <main+0x39c>
+ 72e:	80 fd       	sbrc	r24, 0
+ 730:	80 c0       	rjmp	.+256    	; 0x832 <main+0x4a8>
 			{
-				if (minute > 1)
- 65e:	80 91 6c 00 	lds	r24, 0x006C
- 662:	90 91 6d 00 	lds	r25, 0x006D
- 666:	02 97       	sbiw	r24, 0x02	; 2
- 668:	50 f0       	brcs	.+20     	; 0x67e <main+0x27e>
-				{
-					minute--;
- 66a:	80 91 6c 00 	lds	r24, 0x006C
- 66e:	90 91 6d 00 	lds	r25, 0x006D
- 672:	01 97       	sbiw	r24, 0x01	; 1
- 674:	90 93 6d 00 	sts	0x006D, r25
- 678:	80 93 6c 00 	sts	0x006C, r24
- 67c:	04 c0       	rjmp	.+8      	; 0x686 <main+0x286>
+				if (bit_is_clear(statusReg, modeBit)){
+ 732:	80 91 6b 00 	lds	r24, 0x006B
+ 736:	20 91 60 00 	lds	r18, 0x0060
+ 73a:	90 e0       	ldi	r25, 0x00	; 0
+ 73c:	02 c0       	rjmp	.+4      	; 0x742 <main+0x3b8>
+ 73e:	95 95       	asr	r25
+ 740:	87 95       	ror	r24
+ 742:	2a 95       	dec	r18
+ 744:	e2 f7       	brpl	.-8      	; 0x73e <main+0x3b4>
+ 746:	80 fd       	sbrc	r24, 0
+ 748:	37 c0       	rjmp	.+110    	; 0x7b8 <main+0x42e>
+					if (zeitMinute > 1)
+ 74a:	80 91 72 00 	lds	r24, 0x0072
+ 74e:	90 91 73 00 	lds	r25, 0x0073
+ 752:	02 97       	sbiw	r24, 0x02	; 2
+ 754:	50 f0       	brcs	.+20     	; 0x76a <main+0x3e0>
+					{
+						zeitMinute--;
+ 756:	80 91 72 00 	lds	r24, 0x0072
+ 75a:	90 91 73 00 	lds	r25, 0x0073
+ 75e:	01 97       	sbiw	r24, 0x01	; 1
+ 760:	90 93 73 00 	sts	0x0073, r25
+ 764:	80 93 72 00 	sts	0x0072, r24
+ 768:	04 c0       	rjmp	.+8      	; 0x772 <main+0x3e8>
+					}
+					else
+					{
+						zeitMinute = 59;
+ 76a:	10 93 73 00 	sts	0x0073, r17
+ 76e:	00 93 72 00 	sts	0x0072, r16
+					}
+					zeitSekunde = 0;
+ 772:	10 92 75 00 	sts	0x0075, r1
+ 776:	10 92 74 00 	sts	0x0074, r1
+					TCNT1H = 0x00;
+ 77a:	1d bc       	out	0x2d, r1	; 45
+					TCNT1L = 0x00;
+ 77c:	1c bc       	out	0x2c, r1	; 44
+					statusReg |= 1<<button3Bit; // Button was pressed
+ 77e:	80 91 64 00 	lds	r24, 0x0064
+ 782:	20 91 6b 00 	lds	r18, 0x006B
+ 786:	ae 01       	movw	r20, r28
+ 788:	02 c0       	rjmp	.+4      	; 0x78e <main+0x404>
+ 78a:	44 0f       	add	r20, r20
+ 78c:	55 1f       	adc	r21, r21
+ 78e:	8a 95       	dec	r24
+ 790:	e2 f7       	brpl	.-8      	; 0x78a <main+0x400>
+ 792:	ca 01       	movw	r24, r20
+ 794:	82 2b       	or	r24, r18
+ 796:	80 93 6b 00 	sts	0x006B, r24
+					encodeLed(zeitSekunde, zeitMinute, zeitStunde);
+ 79a:	40 91 70 00 	lds	r20, 0x0070
+ 79e:	50 91 71 00 	lds	r21, 0x0071
+ 7a2:	60 91 72 00 	lds	r22, 0x0072
+ 7a6:	70 91 73 00 	lds	r23, 0x0073
+ 7aa:	80 91 74 00 	lds	r24, 0x0074
+ 7ae:	90 91 75 00 	lds	r25, 0x0075
+ 7b2:	0e 94 5c 00 	call	0xb8	; 0xb8 <encodeLed>
+ 7b6:	3d c0       	rjmp	.+122    	; 0x832 <main+0x4a8>
 				}
 				else
 				{
-					minute = 59;
- 67e:	10 93 6d 00 	sts	0x006D, r17
- 682:	00 93 6c 00 	sts	0x006C, r16
+					if (weckMinute > 1)
+ 7b8:	80 91 6e 00 	lds	r24, 0x006E
+ 7bc:	90 91 6f 00 	lds	r25, 0x006F
+ 7c0:	02 97       	sbiw	r24, 0x02	; 2
+ 7c2:	50 f0       	brcs	.+20     	; 0x7d8 <main+0x44e>
+					{
+						weckMinute--;
+ 7c4:	80 91 6e 00 	lds	r24, 0x006E
+ 7c8:	90 91 6f 00 	lds	r25, 0x006F
+ 7cc:	01 97       	sbiw	r24, 0x01	; 1
+ 7ce:	90 93 6f 00 	sts	0x006F, r25
+ 7d2:	80 93 6e 00 	sts	0x006E, r24
+ 7d6:	04 c0       	rjmp	.+8      	; 0x7e0 <main+0x456>
+					}
+					else
+					{
+						weckMinute = 59;
+ 7d8:	10 93 6f 00 	sts	0x006F, r17
+ 7dc:	00 93 6e 00 	sts	0x006E, r16
+					}
+					statusReg |= 1<<button3Bit; // Button was pressed
+ 7e0:	80 91 64 00 	lds	r24, 0x0064
+ 7e4:	20 91 6b 00 	lds	r18, 0x006B
+ 7e8:	ae 01       	movw	r20, r28
+ 7ea:	02 c0       	rjmp	.+4      	; 0x7f0 <main+0x466>
+ 7ec:	44 0f       	add	r20, r20
+ 7ee:	55 1f       	adc	r21, r21
+ 7f0:	8a 95       	dec	r24
+ 7f2:	e2 f7       	brpl	.-8      	; 0x7ec <main+0x462>
+ 7f4:	ca 01       	movw	r24, r20
+ 7f6:	82 2b       	or	r24, r18
+ 7f8:	80 93 6b 00 	sts	0x006B, r24
+					encodeLed(0, weckMinute, weckStunde);
+ 7fc:	40 91 6c 00 	lds	r20, 0x006C
+ 800:	50 91 6d 00 	lds	r21, 0x006D
+ 804:	60 91 6e 00 	lds	r22, 0x006E
+ 808:	70 91 6f 00 	lds	r23, 0x006F
+ 80c:	80 e0       	ldi	r24, 0x00	; 0
+ 80e:	0e 94 5c 00 	call	0xb8	; 0xb8 <encodeLed>
+ 812:	0f c0       	rjmp	.+30     	; 0x832 <main+0x4a8>
 				}
-				sekunde = 0;
- 686:	10 92 6f 00 	sts	0x006F, r1
- 68a:	10 92 6e 00 	sts	0x006E, r1
-				TCNT1H = 0x00;
- 68e:	1d bc       	out	0x2d, r1	; 45
-				TCNT1L = 0x00;
- 690:	1c bc       	out	0x2c, r1	; 44
-				statusReg |= 1<<button3Bit; // Button was pressed
- 692:	80 91 64 00 	lds	r24, 0x0064
- 696:	20 91 69 00 	lds	r18, 0x0069
- 69a:	ae 01       	movw	r20, r28
- 69c:	02 c0       	rjmp	.+4      	; 0x6a2 <main+0x2a2>
- 69e:	44 0f       	add	r20, r20
- 6a0:	55 1f       	adc	r21, r21
- 6a2:	8a 95       	dec	r24
- 6a4:	e2 f7       	brpl	.-8      	; 0x69e <main+0x29e>
- 6a6:	ca 01       	movw	r24, r20
- 6a8:	82 2b       	or	r24, r18
- 6aa:	80 93 69 00 	sts	0x0069, r24
-				statusReg |= 1<<updateBit;
- 6ae:	80 91 68 00 	lds	r24, 0x0068
- 6b2:	20 91 69 00 	lds	r18, 0x0069
- 6b6:	ae 01       	movw	r20, r28
- 6b8:	02 c0       	rjmp	.+4      	; 0x6be <main+0x2be>
- 6ba:	44 0f       	add	r20, r20
- 6bc:	55 1f       	adc	r21, r21
- 6be:	8a 95       	dec	r24
- 6c0:	e2 f7       	brpl	.-8      	; 0x6ba <main+0x2ba>
- 6c2:	ca 01       	movw	r24, r20
- 6c4:	82 2b       	or	r24, r18
- 6c6:	80 93 69 00 	sts	0x0069, r24
- 6ca:	0f c0       	rjmp	.+30     	; 0x6ea <main+0x2ea>
 			}
 		}
 		else
 		{
 			statusReg &= ~(1<<button3Bit); // Button is not pressed
- 6cc:	80 91 64 00 	lds	r24, 0x0064
- 6d0:	20 91 69 00 	lds	r18, 0x0069
- 6d4:	ae 01       	movw	r20, r28
- 6d6:	02 c0       	rjmp	.+4      	; 0x6dc <main+0x2dc>
- 6d8:	44 0f       	add	r20, r20
- 6da:	55 1f       	adc	r21, r21
- 6dc:	8a 95       	dec	r24
- 6de:	e2 f7       	brpl	.-8      	; 0x6d8 <main+0x2d8>
- 6e0:	ca 01       	movw	r24, r20
- 6e2:	80 95       	com	r24
- 6e4:	82 23       	and	r24, r18
- 6e6:	80 93 69 00 	sts	0x0069, r24
+ 814:	80 91 64 00 	lds	r24, 0x0064
+ 818:	20 91 6b 00 	lds	r18, 0x006B
+ 81c:	ae 01       	movw	r20, r28
+ 81e:	02 c0       	rjmp	.+4      	; 0x824 <main+0x49a>
+ 820:	44 0f       	add	r20, r20
+ 822:	55 1f       	adc	r21, r21
+ 824:	8a 95       	dec	r24
+ 826:	e2 f7       	brpl	.-8      	; 0x820 <main+0x496>
+ 828:	ca 01       	movw	r24, r20
+ 82a:	80 95       	com	r24
+ 82c:	82 23       	and	r24, r18
+ 82e:	80 93 6b 00 	sts	0x006B, r24
 		}
 		// ==================================
 				
+
 		// Toggle Alarm
 		if ( !( PIND & (1<<PIND6) ) )	// When pulled to LOW by pressing button
- 6ea:	86 99       	sbic	0x10, 6	; 16
- 6ec:	1e c0       	rjmp	.+60     	; 0x72a <main+0x32a>
+ 832:	86 99       	sbic	0x10, 6	; 16
+ 834:	1e c0       	rjmp	.+60     	; 0x872 <__stack+0x13>
 		{
 			if (bit_is_clear(statusReg, button6Bit)) // When previously not pressed
- 6ee:	80 91 69 00 	lds	r24, 0x0069
- 6f2:	20 91 61 00 	lds	r18, 0x0061
- 6f6:	90 e0       	ldi	r25, 0x00	; 0
- 6f8:	02 c0       	rjmp	.+4      	; 0x6fe <main+0x2fe>
- 6fa:	95 95       	asr	r25
- 6fc:	87 95       	ror	r24
- 6fe:	2a 95       	dec	r18
- 700:	e2 f7       	brpl	.-8      	; 0x6fa <main+0x2fa>
- 702:	80 fd       	sbrc	r24, 0
- 704:	21 c0       	rjmp	.+66     	; 0x748 <main+0x348>
+ 836:	80 91 6b 00 	lds	r24, 0x006B
+ 83a:	20 91 61 00 	lds	r18, 0x0061
+ 83e:	90 e0       	ldi	r25, 0x00	; 0
+ 840:	02 c0       	rjmp	.+4      	; 0x846 <main+0x4bc>
+ 842:	95 95       	asr	r25
+ 844:	87 95       	ror	r24
+ 846:	2a 95       	dec	r18
+ 848:	e2 f7       	brpl	.-8      	; 0x842 <main+0x4b8>
+ 84a:	80 fd       	sbrc	r24, 0
+ 84c:	21 c0       	rjmp	.+66     	; 0x890 <__stack+0x31>
 			{
 				PORTD ^= (1<<PIND5);
- 706:	82 b3       	in	r24, 0x12	; 18
- 708:	8d 25       	eor	r24, r13
- 70a:	82 bb       	out	0x12, r24	; 18
+ 84e:	82 b3       	in	r24, 0x12	; 18
+ 850:	8d 25       	eor	r24, r13
+ 852:	82 bb       	out	0x12, r24	; 18
 				statusReg |= 1<<button6Bit; // Button was pressed
- 70c:	80 91 61 00 	lds	r24, 0x0061
- 710:	20 91 69 00 	lds	r18, 0x0069
- 714:	ae 01       	movw	r20, r28
- 716:	02 c0       	rjmp	.+4      	; 0x71c <main+0x31c>
- 718:	44 0f       	add	r20, r20
- 71a:	55 1f       	adc	r21, r21
- 71c:	8a 95       	dec	r24
- 71e:	e2 f7       	brpl	.-8      	; 0x718 <main+0x318>
- 720:	ca 01       	movw	r24, r20
- 722:	82 2b       	or	r24, r18
- 724:	80 93 69 00 	sts	0x0069, r24
- 728:	0f c0       	rjmp	.+30     	; 0x748 <main+0x348>
-				//statusReg |= 1<<updateBit;
+ 854:	80 91 61 00 	lds	r24, 0x0061
+ 858:	20 91 6b 00 	lds	r18, 0x006B
+ 85c:	ae 01       	movw	r20, r28
+ 85e:	02 c0       	rjmp	.+4      	; 0x864 <__stack+0x5>
+ 860:	44 0f       	add	r20, r20
+ 862:	55 1f       	adc	r21, r21
+ 864:	8a 95       	dec	r24
+ 866:	e2 f7       	brpl	.-8      	; 0x860 <__stack+0x1>
+ 868:	ca 01       	movw	r24, r20
+ 86a:	82 2b       	or	r24, r18
+ 86c:	80 93 6b 00 	sts	0x006B, r24
+ 870:	0f c0       	rjmp	.+30     	; 0x890 <__stack+0x31>
 			}
 		}
 		else
 		{
 			statusReg &= ~(1<<button6Bit); // Button is not pressed
- 72a:	80 91 61 00 	lds	r24, 0x0061
- 72e:	20 91 69 00 	lds	r18, 0x0069
- 732:	ae 01       	movw	r20, r28
- 734:	02 c0       	rjmp	.+4      	; 0x73a <main+0x33a>
- 736:	44 0f       	add	r20, r20
- 738:	55 1f       	adc	r21, r21
- 73a:	8a 95       	dec	r24
- 73c:	e2 f7       	brpl	.-8      	; 0x736 <main+0x336>
- 73e:	ca 01       	movw	r24, r20
- 740:	80 95       	com	r24
- 742:	82 23       	and	r24, r18
- 744:	80 93 69 00 	sts	0x0069, r24
+ 872:	80 91 61 00 	lds	r24, 0x0061
+ 876:	20 91 6b 00 	lds	r18, 0x006B
+ 87a:	ae 01       	movw	r20, r28
+ 87c:	02 c0       	rjmp	.+4      	; 0x882 <__stack+0x23>
+ 87e:	44 0f       	add	r20, r20
+ 880:	55 1f       	adc	r21, r21
+ 882:	8a 95       	dec	r24
+ 884:	e2 f7       	brpl	.-8      	; 0x87e <__stack+0x1f>
+ 886:	ca 01       	movw	r24, r20
+ 888:	80 95       	com	r24
+ 88a:	82 23       	and	r24, r18
+ 88c:	80 93 6b 00 	sts	0x006B, r24
 		}
 		
 		// Mode Toggle
 		if ( !( PINB & (1<<PINB0) ) )	// When pulled to LOW by pressing button
- 748:	b0 99       	sbic	0x16, 0	; 22
- 74a:	37 c0       	rjmp	.+110    	; 0x7ba <main+0x3ba>
+ 890:	b0 99       	sbic	0x16, 0	; 22
+ 892:	69 c0       	rjmp	.+210    	; 0x966 <__stack+0x107>
 		{
 			if (bit_is_clear(statusReg, button5Bit)) // When previously not pressed
- 74c:	80 91 69 00 	lds	r24, 0x0069
- 750:	20 91 62 00 	lds	r18, 0x0062
- 754:	90 e0       	ldi	r25, 0x00	; 0
- 756:	02 c0       	rjmp	.+4      	; 0x75c <main+0x35c>
- 758:	95 95       	asr	r25
- 75a:	87 95       	ror	r24
- 75c:	2a 95       	dec	r18
- 75e:	e2 f7       	brpl	.-8      	; 0x758 <main+0x358>
- 760:	80 fd       	sbrc	r24, 0
- 762:	3a c0       	rjmp	.+116    	; 0x7d8 <main+0x3d8>
+ 894:	80 91 6b 00 	lds	r24, 0x006B
+ 898:	20 91 62 00 	lds	r18, 0x0062
+ 89c:	90 e0       	ldi	r25, 0x00	; 0
+ 89e:	02 c0       	rjmp	.+4      	; 0x8a4 <__stack+0x45>
+ 8a0:	95 95       	asr	r25
+ 8a2:	87 95       	ror	r24
+ 8a4:	2a 95       	dec	r18
+ 8a6:	e2 f7       	brpl	.-8      	; 0x8a0 <__stack+0x41>
+ 8a8:	80 fd       	sbrc	r24, 0
+ 8aa:	6c c0       	rjmp	.+216    	; 0x984 <__stack+0x125>
 			{
-				statusReg ^= 1<<modeBit;
- 764:	80 91 60 00 	lds	r24, 0x0060
- 768:	20 91 69 00 	lds	r18, 0x0069
- 76c:	ae 01       	movw	r20, r28
- 76e:	02 c0       	rjmp	.+4      	; 0x774 <main+0x374>
- 770:	44 0f       	add	r20, r20
- 772:	55 1f       	adc	r21, r21
- 774:	8a 95       	dec	r24
- 776:	e2 f7       	brpl	.-8      	; 0x770 <main+0x370>
- 778:	ca 01       	movw	r24, r20
- 77a:	82 27       	eor	r24, r18
- 77c:	80 93 69 00 	sts	0x0069, r24
-				statusReg |= 1<<button5Bit; // Button was pressed
- 780:	80 91 62 00 	lds	r24, 0x0062
- 784:	20 91 69 00 	lds	r18, 0x0069
- 788:	ae 01       	movw	r20, r28
- 78a:	02 c0       	rjmp	.+4      	; 0x790 <main+0x390>
- 78c:	44 0f       	add	r20, r20
- 78e:	55 1f       	adc	r21, r21
- 790:	8a 95       	dec	r24
- 792:	e2 f7       	brpl	.-8      	; 0x78c <main+0x38c>
- 794:	ca 01       	movw	r24, r20
- 796:	82 2b       	or	r24, r18
- 798:	80 93 69 00 	sts	0x0069, r24
-				statusReg |= 1<<updateBit;
- 79c:	80 91 68 00 	lds	r24, 0x0068
- 7a0:	20 91 69 00 	lds	r18, 0x0069
- 7a4:	ae 01       	movw	r20, r28
- 7a6:	02 c0       	rjmp	.+4      	; 0x7ac <main+0x3ac>
- 7a8:	44 0f       	add	r20, r20
- 7aa:	55 1f       	adc	r21, r21
- 7ac:	8a 95       	dec	r24
- 7ae:	e2 f7       	brpl	.-8      	; 0x7a8 <main+0x3a8>
- 7b0:	ca 01       	movw	r24, r20
- 7b2:	82 2b       	or	r24, r18
- 7b4:	80 93 69 00 	sts	0x0069, r24
- 7b8:	0f c0       	rjmp	.+30     	; 0x7d8 <main+0x3d8>
+				if ((zeitStunde == weckStunde) && (zeitMinute == weckMinute))
+ 8ac:	20 91 70 00 	lds	r18, 0x0070
+ 8b0:	30 91 71 00 	lds	r19, 0x0071
+ 8b4:	80 91 6c 00 	lds	r24, 0x006C
+ 8b8:	90 91 6d 00 	lds	r25, 0x006D
+ 8bc:	28 17       	cp	r18, r24
+ 8be:	39 07       	cpc	r19, r25
+ 8c0:	d9 f4       	brne	.+54     	; 0x8f8 <__stack+0x99>
+ 8c2:	20 91 72 00 	lds	r18, 0x0072
+ 8c6:	30 91 73 00 	lds	r19, 0x0073
+ 8ca:	80 91 6e 00 	lds	r24, 0x006E
+ 8ce:	90 91 6f 00 	lds	r25, 0x006F
+ 8d2:	28 17       	cp	r18, r24
+ 8d4:	39 07       	cpc	r19, r25
+ 8d6:	81 f4       	brne	.+32     	; 0x8f8 <__stack+0x99>
+				{
+					statusReg2 &= ~(1<<alarmOnBit);
+ 8d8:	80 91 68 00 	lds	r24, 0x0068
+ 8dc:	20 91 69 00 	lds	r18, 0x0069
+ 8e0:	ae 01       	movw	r20, r28
+ 8e2:	02 c0       	rjmp	.+4      	; 0x8e8 <__stack+0x89>
+ 8e4:	44 0f       	add	r20, r20
+ 8e6:	55 1f       	adc	r21, r21
+ 8e8:	8a 95       	dec	r24
+ 8ea:	e2 f7       	brpl	.-8      	; 0x8e4 <__stack+0x85>
+ 8ec:	ca 01       	movw	r24, r20
+ 8ee:	80 95       	com	r24
+ 8f0:	82 23       	and	r24, r18
+ 8f2:	80 93 69 00 	sts	0x0069, r24
+ 8f6:	46 c0       	rjmp	.+140    	; 0x984 <__stack+0x125>
+				}
+				else
+				{
+					statusReg ^= 1<<modeBit;
+ 8f8:	80 91 60 00 	lds	r24, 0x0060
+ 8fc:	20 91 6b 00 	lds	r18, 0x006B
+ 900:	ae 01       	movw	r20, r28
+ 902:	02 c0       	rjmp	.+4      	; 0x908 <__stack+0xa9>
+ 904:	44 0f       	add	r20, r20
+ 906:	55 1f       	adc	r21, r21
+ 908:	8a 95       	dec	r24
+ 90a:	e2 f7       	brpl	.-8      	; 0x904 <__stack+0xa5>
+ 90c:	ca 01       	movw	r24, r20
+ 90e:	82 27       	eor	r24, r18
+ 910:	80 93 6b 00 	sts	0x006B, r24
+					statusReg |= 1<<button5Bit; // Button was pressed
+ 914:	80 91 62 00 	lds	r24, 0x0062
+ 918:	20 91 6b 00 	lds	r18, 0x006B
+ 91c:	ae 01       	movw	r20, r28
+ 91e:	02 c0       	rjmp	.+4      	; 0x924 <__stack+0xc5>
+ 920:	44 0f       	add	r20, r20
+ 922:	55 1f       	adc	r21, r21
+ 924:	8a 95       	dec	r24
+ 926:	e2 f7       	brpl	.-8      	; 0x920 <__stack+0xc1>
+ 928:	ca 01       	movw	r24, r20
+ 92a:	82 2b       	or	r24, r18
+ 92c:	80 93 6b 00 	sts	0x006B, r24
+					if (bit_is_clear(statusReg, modeBit))
+ 930:	80 91 6b 00 	lds	r24, 0x006B
+ 934:	20 91 60 00 	lds	r18, 0x0060
+ 938:	90 e0       	ldi	r25, 0x00	; 0
+ 93a:	02 c0       	rjmp	.+4      	; 0x940 <__stack+0xe1>
+ 93c:	95 95       	asr	r25
+ 93e:	87 95       	ror	r24
+ 940:	2a 95       	dec	r18
+ 942:	e2 f7       	brpl	.-8      	; 0x93c <__stack+0xdd>
+ 944:	80 fd       	sbrc	r24, 0
+ 946:	1e c0       	rjmp	.+60     	; 0x984 <__stack+0x125>
+					{
+						encodeLed(zeitSekunde, zeitMinute, zeitStunde);
+ 948:	40 91 70 00 	lds	r20, 0x0070
+ 94c:	50 91 71 00 	lds	r21, 0x0071
+ 950:	60 91 72 00 	lds	r22, 0x0072
+ 954:	70 91 73 00 	lds	r23, 0x0073
+ 958:	80 91 74 00 	lds	r24, 0x0074
+ 95c:	90 91 75 00 	lds	r25, 0x0075
+ 960:	0e 94 5c 00 	call	0xb8	; 0xb8 <encodeLed>
+ 964:	0f c0       	rjmp	.+30     	; 0x984 <__stack+0x125>
+
 			}
 		}
 		else
 		{
 			statusReg &= ~(1<<button5Bit); // Button is not pressed
- 7ba:	80 91 62 00 	lds	r24, 0x0062
- 7be:	20 91 69 00 	lds	r18, 0x0069
- 7c2:	ae 01       	movw	r20, r28
- 7c4:	02 c0       	rjmp	.+4      	; 0x7ca <main+0x3ca>
- 7c6:	44 0f       	add	r20, r20
- 7c8:	55 1f       	adc	r21, r21
- 7ca:	8a 95       	dec	r24
- 7cc:	e2 f7       	brpl	.-8      	; 0x7c6 <main+0x3c6>
- 7ce:	ca 01       	movw	r24, r20
- 7d0:	80 95       	com	r24
- 7d2:	82 23       	and	r24, r18
- 7d4:	80 93 69 00 	sts	0x0069, r24
-			encodeLed();
-			statusReg &= ~(1<<updateBit);
+ 966:	80 91 62 00 	lds	r24, 0x0062
+ 96a:	20 91 6b 00 	lds	r18, 0x006B
+ 96e:	ae 01       	movw	r20, r28
+ 970:	02 c0       	rjmp	.+4      	; 0x976 <__stack+0x117>
+ 972:	44 0f       	add	r20, r20
+ 974:	55 1f       	adc	r21, r21
+ 976:	8a 95       	dec	r24
+ 978:	e2 f7       	brpl	.-8      	; 0x972 <__stack+0x113>
+ 97a:	ca 01       	movw	r24, r20
+ 97c:	80 95       	com	r24
+ 97e:	82 23       	and	r24, r18
+ 980:	80 93 6b 00 	sts	0x006B, r24
 		}
-		*/
-		
-		encodeLed();
- 7d8:	0e 94 49 00 	call	0x92	; 0x92 <encodeLed>
+
+		// Normal mode or Alarm mode?
+		if (bit_is_set(statusReg, modeBit))
+ 984:	80 91 6b 00 	lds	r24, 0x006B
+ 988:	20 91 60 00 	lds	r18, 0x0060
+ 98c:	90 e0       	ldi	r25, 0x00	; 0
+ 98e:	02 c0       	rjmp	.+4      	; 0x994 <__stack+0x135>
+ 990:	95 95       	asr	r25
+ 992:	87 95       	ror	r24
+ 994:	2a 95       	dec	r18
+ 996:	e2 f7       	brpl	.-8      	; 0x990 <__stack+0x131>
+ 998:	80 ff       	sbrs	r24, 0
+ 99a:	1f cd       	rjmp	.-1474   	; 0x3da <main+0x50>
+		{
+			encodeLed(0, weckMinute, weckStunde);
+ 99c:	40 91 6c 00 	lds	r20, 0x006C
+ 9a0:	50 91 6d 00 	lds	r21, 0x006D
+ 9a4:	60 91 6e 00 	lds	r22, 0x006E
+ 9a8:	70 91 6f 00 	lds	r23, 0x006F
+ 9ac:	80 e0       	ldi	r24, 0x00	; 0
+ 9ae:	0e 94 5c 00 	call	0xb8	; 0xb8 <encodeLed>
+ 9b2:	13 cd       	rjmp	.-1498   	; 0x3da <main+0x50>
+
+000009b4 <__vector_7>:
 		
     } // while end
- 7dc:	42 ce       	rjmp	.-892    	; 0x462 <main+0x62>
-
-000007de <__vector_7>:
 }
 
 ISR (TIMER1_COMPA_vect)
 {
- 7de:	1f 92       	push	r1
- 7e0:	0f 92       	push	r0
- 7e2:	0f b6       	in	r0, 0x3f	; 63
- 7e4:	0f 92       	push	r0
- 7e6:	11 24       	eor	r1, r1
- 7e8:	2f 93       	push	r18
- 7ea:	3f 93       	push	r19
- 7ec:	4f 93       	push	r20
- 7ee:	6f 93       	push	r22
- 7f0:	7f 93       	push	r23
- 7f2:	8f 93       	push	r24
- 7f4:	9f 93       	push	r25
-	sekunde++;
- 7f6:	80 91 6e 00 	lds	r24, 0x006E
- 7fa:	90 91 6f 00 	lds	r25, 0x006F
- 7fe:	01 96       	adiw	r24, 0x01	; 1
- 800:	90 93 6f 00 	sts	0x006F, r25
- 804:	80 93 6e 00 	sts	0x006E, r24
-	if(sekunde == 60)
- 808:	80 91 6e 00 	lds	r24, 0x006E
- 80c:	90 91 6f 00 	lds	r25, 0x006F
- 810:	cc 97       	sbiw	r24, 0x3c	; 60
- 812:	69 f4       	brne	.+26     	; 0x82e <__vector_7+0x50>
+ 9b4:	1f 92       	push	r1
+ 9b6:	0f 92       	push	r0
+ 9b8:	0f b6       	in	r0, 0x3f	; 63
+ 9ba:	0f 92       	push	r0
+ 9bc:	11 24       	eor	r1, r1
+ 9be:	2f 93       	push	r18
+ 9c0:	3f 93       	push	r19
+ 9c2:	4f 93       	push	r20
+ 9c4:	5f 93       	push	r21
+ 9c6:	6f 93       	push	r22
+ 9c8:	7f 93       	push	r23
+ 9ca:	8f 93       	push	r24
+ 9cc:	9f 93       	push	r25
+ 9ce:	af 93       	push	r26
+ 9d0:	bf 93       	push	r27
+ 9d2:	ef 93       	push	r30
+ 9d4:	ff 93       	push	r31
+	zeitSekunde++;
+ 9d6:	80 91 74 00 	lds	r24, 0x0074
+ 9da:	90 91 75 00 	lds	r25, 0x0075
+ 9de:	01 96       	adiw	r24, 0x01	; 1
+ 9e0:	90 93 75 00 	sts	0x0075, r25
+ 9e4:	80 93 74 00 	sts	0x0074, r24
+	if(zeitSekunde == 60)
+ 9e8:	80 91 74 00 	lds	r24, 0x0074
+ 9ec:	90 91 75 00 	lds	r25, 0x0075
+ 9f0:	cc 97       	sbiw	r24, 0x3c	; 60
+ 9f2:	e9 f4       	brne	.+58     	; 0xa2e <__vector_7+0x7a>
 	{
-		minute++;
- 814:	80 91 6c 00 	lds	r24, 0x006C
- 818:	90 91 6d 00 	lds	r25, 0x006D
- 81c:	01 96       	adiw	r24, 0x01	; 1
- 81e:	90 93 6d 00 	sts	0x006D, r25
- 822:	80 93 6c 00 	sts	0x006C, r24
-		sekunde = 0;
- 826:	10 92 6f 00 	sts	0x006F, r1
- 82a:	10 92 6e 00 	sts	0x006E, r1
+		zeitMinute++;
+ 9f4:	80 91 72 00 	lds	r24, 0x0072
+ 9f8:	90 91 73 00 	lds	r25, 0x0073
+ 9fc:	01 96       	adiw	r24, 0x01	; 1
+ 9fe:	90 93 73 00 	sts	0x0073, r25
+ a02:	80 93 72 00 	sts	0x0072, r24
+		zeitSekunde = 0;
+ a06:	10 92 75 00 	sts	0x0075, r1
+ a0a:	10 92 74 00 	sts	0x0074, r1
+		statusReg2 |= (1<<alarmOnBit);
+ a0e:	80 91 68 00 	lds	r24, 0x0068
+ a12:	40 91 69 00 	lds	r20, 0x0069
+ a16:	21 e0       	ldi	r18, 0x01	; 1
+ a18:	30 e0       	ldi	r19, 0x00	; 0
+ a1a:	b9 01       	movw	r22, r18
+ a1c:	02 c0       	rjmp	.+4      	; 0xa22 <__vector_7+0x6e>
+ a1e:	66 0f       	add	r22, r22
+ a20:	77 1f       	adc	r23, r23
+ a22:	8a 95       	dec	r24
+ a24:	e2 f7       	brpl	.-8      	; 0xa1e <__vector_7+0x6a>
+ a26:	cb 01       	movw	r24, r22
+ a28:	84 2b       	or	r24, r20
+ a2a:	80 93 69 00 	sts	0x0069, r24
 	}
-	if(minute == 60)
- 82e:	80 91 6c 00 	lds	r24, 0x006C
- 832:	90 91 6d 00 	lds	r25, 0x006D
- 836:	cc 97       	sbiw	r24, 0x3c	; 60
- 838:	69 f4       	brne	.+26     	; 0x854 <__vector_7+0x76>
+	if(zeitMinute == 60)
+ a2e:	80 91 72 00 	lds	r24, 0x0072
+ a32:	90 91 73 00 	lds	r25, 0x0073
+ a36:	cc 97       	sbiw	r24, 0x3c	; 60
+ a38:	69 f4       	brne	.+26     	; 0xa54 <__vector_7+0xa0>
 	{
-		stunde++;
- 83a:	80 91 6a 00 	lds	r24, 0x006A
- 83e:	90 91 6b 00 	lds	r25, 0x006B
- 842:	01 96       	adiw	r24, 0x01	; 1
- 844:	90 93 6b 00 	sts	0x006B, r25
- 848:	80 93 6a 00 	sts	0x006A, r24
-		minute = 0;
- 84c:	10 92 6d 00 	sts	0x006D, r1
- 850:	10 92 6c 00 	sts	0x006C, r1
+		zeitStunde++;
+ a3a:	80 91 70 00 	lds	r24, 0x0070
+ a3e:	90 91 71 00 	lds	r25, 0x0071
+ a42:	01 96       	adiw	r24, 0x01	; 1
+ a44:	90 93 71 00 	sts	0x0071, r25
+ a48:	80 93 70 00 	sts	0x0070, r24
+		zeitMinute = 0;
+ a4c:	10 92 73 00 	sts	0x0073, r1
+ a50:	10 92 72 00 	sts	0x0072, r1
 	}
-	if(stunde == 24)
- 854:	80 91 6a 00 	lds	r24, 0x006A
- 858:	90 91 6b 00 	lds	r25, 0x006B
- 85c:	48 97       	sbiw	r24, 0x18	; 24
- 85e:	21 f4       	brne	.+8      	; 0x868 <__stack+0x9>
+	if(zeitStunde == 24)
+ a54:	80 91 70 00 	lds	r24, 0x0070
+ a58:	90 91 71 00 	lds	r25, 0x0071
+ a5c:	48 97       	sbiw	r24, 0x18	; 24
+ a5e:	21 f4       	brne	.+8      	; 0xa68 <__vector_7+0xb4>
 	{
-		stunde = 0;
- 860:	10 92 6b 00 	sts	0x006B, r1
- 864:	10 92 6a 00 	sts	0x006A, r1
+		zeitStunde = 0;
+ a60:	10 92 71 00 	sts	0x0071, r1
+ a64:	10 92 70 00 	sts	0x0070, r1
 	}
-	statusReg |= 1<<updateBit;
- 868:	80 91 68 00 	lds	r24, 0x0068
- 86c:	40 91 69 00 	lds	r20, 0x0069
- 870:	21 e0       	ldi	r18, 0x01	; 1
- 872:	30 e0       	ldi	r19, 0x00	; 0
- 874:	b9 01       	movw	r22, r18
- 876:	02 c0       	rjmp	.+4      	; 0x87c <__stack+0x1d>
- 878:	66 0f       	add	r22, r22
- 87a:	77 1f       	adc	r23, r23
- 87c:	8a 95       	dec	r24
- 87e:	e2 f7       	brpl	.-8      	; 0x878 <__stack+0x19>
- 880:	cb 01       	movw	r24, r22
- 882:	84 2b       	or	r24, r20
- 884:	80 93 69 00 	sts	0x0069, r24
- 888:	9f 91       	pop	r25
- 88a:	8f 91       	pop	r24
- 88c:	7f 91       	pop	r23
- 88e:	6f 91       	pop	r22
- 890:	4f 91       	pop	r20
- 892:	3f 91       	pop	r19
- 894:	2f 91       	pop	r18
- 896:	0f 90       	pop	r0
- 898:	0f be       	out	0x3f, r0	; 63
- 89a:	0f 90       	pop	r0
- 89c:	1f 90       	pop	r1
- 89e:	18 95       	reti
 
-000008a0 <__umulhisi3>:
- 8a0:	a2 9f       	mul	r26, r18
- 8a2:	b0 01       	movw	r22, r0
- 8a4:	b3 9f       	mul	r27, r19
- 8a6:	c0 01       	movw	r24, r0
- 8a8:	a3 9f       	mul	r26, r19
- 8aa:	70 0d       	add	r23, r0
- 8ac:	81 1d       	adc	r24, r1
- 8ae:	11 24       	eor	r1, r1
- 8b0:	91 1d       	adc	r25, r1
- 8b2:	b2 9f       	mul	r27, r18
- 8b4:	70 0d       	add	r23, r0
- 8b6:	81 1d       	adc	r24, r1
- 8b8:	11 24       	eor	r1, r1
- 8ba:	91 1d       	adc	r25, r1
- 8bc:	08 95       	ret
+	if ((bit_is_clear(statusReg, modeBit)))
+ a68:	80 91 6b 00 	lds	r24, 0x006B
+ a6c:	20 91 60 00 	lds	r18, 0x0060
+ a70:	90 e0       	ldi	r25, 0x00	; 0
+ a72:	02 c0       	rjmp	.+4      	; 0xa78 <__vector_7+0xc4>
+ a74:	95 95       	asr	r25
+ a76:	87 95       	ror	r24
+ a78:	2a 95       	dec	r18
+ a7a:	e2 f7       	brpl	.-8      	; 0xa74 <__vector_7+0xc0>
+ a7c:	80 fd       	sbrc	r24, 0
+ a7e:	0e c0       	rjmp	.+28     	; 0xa9c <__vector_7+0xe8>
+	{
+		encodeLed(zeitSekunde, zeitMinute, zeitStunde);
+ a80:	40 91 70 00 	lds	r20, 0x0070
+ a84:	50 91 71 00 	lds	r21, 0x0071
+ a88:	60 91 72 00 	lds	r22, 0x0072
+ a8c:	70 91 73 00 	lds	r23, 0x0073
+ a90:	80 91 74 00 	lds	r24, 0x0074
+ a94:	90 91 75 00 	lds	r25, 0x0075
+ a98:	0e 94 5c 00 	call	0xb8	; 0xb8 <encodeLed>
+	}
+	
+	if ((zeitMinute == weckMinute) && (zeitStunde == weckStunde) && (bit_is_set(statusReg2, alarmOnBit)) && (bit_is_set(PORTD, PD5)))
+ a9c:	20 91 72 00 	lds	r18, 0x0072
+ aa0:	30 91 73 00 	lds	r19, 0x0073
+ aa4:	80 91 6e 00 	lds	r24, 0x006E
+ aa8:	90 91 6f 00 	lds	r25, 0x006F
+ aac:	28 17       	cp	r18, r24
+ aae:	39 07       	cpc	r19, r25
+ ab0:	e1 f4       	brne	.+56     	; 0xaea <__vector_7+0x136>
+ ab2:	20 91 70 00 	lds	r18, 0x0070
+ ab6:	30 91 71 00 	lds	r19, 0x0071
+ aba:	80 91 6c 00 	lds	r24, 0x006C
+ abe:	90 91 6d 00 	lds	r25, 0x006D
+ ac2:	28 17       	cp	r18, r24
+ ac4:	39 07       	cpc	r19, r25
+ ac6:	89 f4       	brne	.+34     	; 0xaea <__vector_7+0x136>
+ ac8:	80 91 69 00 	lds	r24, 0x0069
+ acc:	20 91 68 00 	lds	r18, 0x0068
+ ad0:	90 e0       	ldi	r25, 0x00	; 0
+ ad2:	02 c0       	rjmp	.+4      	; 0xad8 <__vector_7+0x124>
+ ad4:	95 95       	asr	r25
+ ad6:	87 95       	ror	r24
+ ad8:	2a 95       	dec	r18
+ ada:	e2 f7       	brpl	.-8      	; 0xad4 <__vector_7+0x120>
+ adc:	80 ff       	sbrs	r24, 0
+ ade:	05 c0       	rjmp	.+10     	; 0xaea <__vector_7+0x136>
+ ae0:	95 9b       	sbis	0x12, 5	; 18
+ ae2:	03 c0       	rjmp	.+6      	; 0xaea <__vector_7+0x136>
+	{
+		beep(1);
+ ae4:	81 e0       	ldi	r24, 0x01	; 1
+ ae6:	0e 94 49 00 	call	0x92	; 0x92 <beep>
+	}
+ aea:	ff 91       	pop	r31
+ aec:	ef 91       	pop	r30
+ aee:	bf 91       	pop	r27
+ af0:	af 91       	pop	r26
+ af2:	9f 91       	pop	r25
+ af4:	8f 91       	pop	r24
+ af6:	7f 91       	pop	r23
+ af8:	6f 91       	pop	r22
+ afa:	5f 91       	pop	r21
+ afc:	4f 91       	pop	r20
+ afe:	3f 91       	pop	r19
+ b00:	2f 91       	pop	r18
+ b02:	0f 90       	pop	r0
+ b04:	0f be       	out	0x3f, r0	; 63
+ b06:	0f 90       	pop	r0
+ b08:	1f 90       	pop	r1
+ b0a:	18 95       	reti
 
-000008be <_exit>:
- 8be:	f8 94       	cli
+00000b0c <_exit>:
+ b0c:	f8 94       	cli
 
-000008c0 <__stop_program>:
- 8c0:	ff cf       	rjmp	.-2      	; 0x8c0 <__stop_program>
+00000b0e <__stop_program>:
+ b0e:	ff cf       	rjmp	.-2      	; 0xb0e <__stop_program>
